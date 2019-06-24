@@ -1,0 +1,28 @@
+<h1 id="ssde">SSDE</h1>
+<p>A <strong>S</strong>imple <strong>S</strong>tate <strong>D</strong>iagram <strong>E</strong>ditor.</p>
+<p><img src="./etc/snapshot.png" /></p>
+<h2 id="documentation">DOCUMENTATION</h2>
+<p>Everything should be rather intuitive..</p>
+<h3 id="editing">Editing</h3>
+<ul>
+<li><p>To <strong>add a state</strong>, select the <img src="./src/images/state.png" /> button in the toolbar and click on the canvas</p></li>
+<li><p>To <strong>add a transition</strong>, select the <img src="./src/images/transition.png" /> button, click on the start state and, keeping the mouse button pressed, go the end state and release mouse button.</p></li>
+<li><p>To <strong>add a self transition</strong> (from a state to itself) , select the <img src="./src/images/loop.png" /> button and click on start state (the location of the click will decide on that of the transition).</p></li>
+<li><p>To <strong>add an initial transition</strong>, select the <img src="./src/images/initstate.png" /> button and click on initial state</p></li>
+<li><p>To <strong>delete a state or a transition</strong>, select the <img src="./src/images/delete.png" /> button and click on the state or transition (deleting a state will also delete all incoming and outcoming transitions)</p></li>
+<li><p>To <strong>move a state</strong>, select the <img src="./src/images/select.png" /> button and drag the state.</p></li>
+<li><p>To <strong>edit a state or a transition</strong>, select the <img src="./src/images/select.png" /> button, click on the corresponding item and update the property panel on the right.</p></li>
+</ul>
+<h3 id="saving-and-loading">Saving and loading</h3>
+<ul>
+<li><p>The current diagram can be saved by invoking the <code>Save</code> or <code>Save As</code> action in the <code>File</code> menu.</p></li>
+<li><p>A saved diagram can be reloaded by invoking the <code>Open</code> action in the <code>File</code> menu.</p></li>
+<li><p>The <code>New</code> action in the <code>File</code> menu clears the diagram</p></li>
+</ul>
+<h3 id="exporting">Exporting</h3>
+<ul>
+<li>The current diagram can be exported to <a href="http://www.graphviz.org">DOT</a> format by invoking the <code>Export DOT</code> action in the <code>Export</code> menu.</li>
+</ul>
+<h2 id="installation">INSTALLATION</h2>
+<p>Prebuilt Windows and MacOS versions can be downloaded <a href="./binaries">here</a></p>
+<p>See the <code>INSTALL</code> file to build from sources.</p>

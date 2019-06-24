@@ -1,0 +1,45 @@
+{
+  "states": [
+    {
+      "id": "_init",
+      "x": 31.0,
+      "y": 76.0
+    },
+    {
+      "id": "Running",
+      "x": 114.0,
+      "y": 295.0
+    },
+    {
+      "id": "Stopped",
+      "x": 125.0,
+      "y": 124.0
+    }
+  ],
+  "transitions": [
+    {
+      "dst_state": "Running",
+      "label": "H/c:=c+1",
+      "location": 3,
+      "src_state": "Running"
+    },
+    {
+      "dst_state": "Stopped",
+      "label": "StartStop",
+      "location": 0,
+      "src_state": "Running"
+    },
+    {
+      "dst_state": "Running",
+      "label": "StartStop/c:=0",
+      "location": 0,
+      "src_state": "Stopped"
+    },
+    {
+      "dst_state": "Stopped",
+      "label": "",
+      "location": 0,
+      "src_state": "_init"
+    }
+  ]
+}
