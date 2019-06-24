@@ -7,3 +7,4 @@ qrc_resources.*
 src/ssde.app/
 CHANGELOG.txt
 README.txt
+!binaries/Ssde_setup.exe
