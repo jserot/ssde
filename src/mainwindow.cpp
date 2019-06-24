@@ -36,6 +36,8 @@ MainWindow::MainWindow()
 
     QHBoxLayout *layout = new QHBoxLayout;
     view = new QGraphicsView(fsd);
+    view->setMinimumWidth(200);
+    view->setMinimumHeight(400);
     createPropertiesPanel();
     layout->addWidget(view);
     layout->addWidget(properties_panel);
