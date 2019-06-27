@@ -50,3 +50,7 @@ Everything should be rather intuitive..
 Prebuilt Windows and MacOS versions can be downloaded [here](./binaries)
 
 See the `INSTALL` file to build from sources.
+
+### Credits
+
+This project was inspired by some code written by A. Deterne and L. Malka.
