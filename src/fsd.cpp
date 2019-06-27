@@ -223,7 +223,8 @@ void Fsd::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         emit fsdModified();
         }
       }
-    else if ( startState != NULL ) {  // An initial pseudo-state has been created but not connected
+    else if ( mode == InsertPseudoState && startState != NULL ) {
+      // An initial pseudo-state has been created but not connected
       removeItem(startState);
       delete startState;
       }
