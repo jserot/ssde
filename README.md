@@ -47,7 +47,7 @@ Everything should be rather intuitive..
 
 ## INSTALLATION
 
-Prebuilt Windows and MacOS versions can be downloaded [here](./binaries)
+Prebuilt Windows and MacOS versions can be downloaded [here](https://github.com/jserot/ssde/releases/tag/v0.1-beta)
 
 See the `INSTALL` file to build from sources.
 
