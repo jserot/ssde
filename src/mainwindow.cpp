@@ -136,21 +136,27 @@ void MainWindow::createToolbar()
     selectButton->setCheckable(true);
     selectButton->setChecked(true);
     selectButton->setIcon(QIcon(":/images/select.png"));
+    selectButton->setToolTip("Select or move items");
     QToolButton *addStateButton = new QToolButton;
     addStateButton->setCheckable(true);
     addStateButton->setIcon(QIcon(":/images/state.png"));
+    addStateButton->setToolTip("Add state");
     QToolButton *addPseudoStateButton = new QToolButton;
     addPseudoStateButton->setCheckable(true);
     addPseudoStateButton->setIcon(QIcon(":/images/initstate.png"));
+    addPseudoStateButton->setToolTip("Add initial transition");
     QToolButton *addTransitionButton = new QToolButton;
     addTransitionButton->setCheckable(true);
     addTransitionButton->setIcon(QIcon(":/images/transition.png"));
+    addTransitionButton->setToolTip("Add transition between two states");
     QToolButton *addLoopTransitionButton = new QToolButton;
     addLoopTransitionButton->setCheckable(true);
     addLoopTransitionButton->setIcon(QIcon(":/images/loop.png"));
+    addLoopTransitionButton->setToolTip("Add self transition");
     QToolButton *deleteButton = new QToolButton;
     deleteButton->setCheckable(true);
     deleteButton->setIcon(QIcon(":/images/delete.png"));
+    deleteButton->setToolTip("Delete items");
 
     toolSet = new QButtonGroup(this);
     toolSet->addButton(selectButton, int(Fsd::SelectItem));

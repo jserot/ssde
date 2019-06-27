@@ -1,4 +1,5 @@
 * Fix dimensions and window resizing capabilities
+* Add a link to RFSM
 * Allow resizing of state boxes
 * Font choice
 * Change cursor shape accoring to currently selected tool
