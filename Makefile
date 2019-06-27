@@ -102,7 +102,7 @@ win32-pre:
 
 win32-post:
 	@echo "** Copying win32 installer exe in ./binaries"
-	cp $(WIN_SRC_DIR)/ssde/dist/windows/Ssde_setup.exe ./binaries
+	cp $(WIN_SRC_DIR)/ssde/dist/windows/Ssde_setup.exe ./binaries/Ssde-$(VERSION)_setup.exe
 
 win32:
 	@echo "******************************************************************************"
