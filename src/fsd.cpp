@@ -87,7 +87,7 @@ Transition* Fsd::addTransition(State* srcState, State* dstState, QString label, 
 {
   Transition *transition = new Transition(srcState, dstState, label, location);
   srcState->addTransition(transition);
-  dstState->addTransition(transition);
+  if ( dstState != srcState ) dstState->addTransition(transition); // Do not add self-transitions twice !
   transition->setZValue(-1000.0);
   addItem(transition);
   return transition;
