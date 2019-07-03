@@ -14,9 +14,10 @@
 #include "state.h"
 #include "fsd.h"
 #include "mainwindow.h"
-#include <fstream>
 
 #include <QtWidgets>
+#include <QFile>
+#include <QTextStream>
 
 QString MainWindow::title = "FSD Editor";
 
@@ -205,35 +206,23 @@ void MainWindow::checkUnsavedChanges()
 
 void MainWindow::openFile()
 {
-    std::ifstream file;
-    std::string fname;
-
-    checkUnsavedChanges();
+  checkUnsavedChanges();
     
-    do {
-        fname = QFileDialog::getOpenFileName(this, "Open file", "", "FSD file (*.fsd)") .toStdString();
-        if(fname.empty()) return;
-        file.open(fname);
-        if(!file) QMessageBox::warning(this, "Error", "Unable to open file");
-    } while ( !file );
-    try
-    {
-        std::string json_data;
-        // Fills json_data with the content of the whole file
-        file.seekg(0, std::ios::end);
-        json_data.reserve(file.tellg());
-        file.seekg(0, std::ios::beg);
-        json_data.assign((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-        fsd->fromString(json_data);
-    }
-    catch(const std::exception& e)
-    {
-        QMessageBox::warning(this, "Error", "Unable to import : " + QString(e.what()));
-        return;
-    }
-    properties_panel->clear();
-    currentFileName = fname;
-    setUnsavedChanges(false);
+  QString fname = QFileDialog::getOpenFileName(this, "Open file", "", "FSD file (*.fsd)");
+  if ( fname.isEmpty() ) return;
+  QFile file(fname);
+  qDebug() << "Opening file " << file.fileName();
+  file.open(QIODevice::ReadOnly);
+  if ( file.error() != QFile::NoError ) {
+    QMessageBox::warning(this, "","Cannot open file " + file.fileName());
+    return;
+  }
+  QTextStream is(&file);
+  QString txt = is.readAll();
+  fsd->fromString(txt);
+  properties_panel->clear();
+  currentFileName = fname;
+  setUnsavedChanges(false);
 }
 
 void MainWindow::newDiagram()
@@ -245,38 +234,37 @@ void MainWindow::newDiagram()
   setUnsavedChanges(false);
 }
 
-void MainWindow::saveToFile(std::string fileName)
+void MainWindow::saveToFile(QString fileName)
 {
-  std::ofstream file;
-  file.open(fileName);
-  if( !file ) QMessageBox::warning(this, "Error", "Unable to open file");
-  file << fsd->toString();
+  QFile file(fileName); 
+  file.open(QIODevice::WriteOnly | QIODevice::Text);
+  if ( file.error() != QFile::NoError ) {
+    QMessageBox::warning(this, "","Cannot open file " + file.fileName());
+    return;
+  }
+  QTextStream os(&file);
+  os << fsd->toString();
   setUnsavedChanges(false);
 }
 
 void MainWindow::save()
 {
-    if ( currentFileName.empty() ) saveAs();
+    if ( currentFileName.isEmpty() ) saveAs();
     else saveToFile(currentFileName);
 }
 
 void MainWindow::saveAs()
 {
-    std::string fname;
-    fname = QFileDialog::getSaveFileName( this, "Save to file", "", "FSD file (*.fsd)") .toStdString();
-    if ( fname.empty() ) return;
-    saveToFile(fname);
+  QString fname = QFileDialog::getSaveFileName( this, "Save to file", "", "FSD file (*.fsd)");
+  if ( fname.isEmpty() ) return;
+  saveToFile(fname);
 }
 
 void MainWindow::exportDot()
 {
-    std::string fname;
-    std::ofstream file;
-    fname = QFileDialog::getSaveFileName( this, "Export to DOT file", "", "DOT file (*.dot)") .toStdString();
-    if ( fname.empty() ) return;
-    file.open(fname);
-    if( !file ) QMessageBox::warning(this, "Error", "Unable to open file");
-    fsd->exportDot(file);
+  QString fname = QFileDialog::getSaveFileName( this, "Export to DOT file", "", "DOT file (*.dot)");
+  if ( fname.isEmpty() ) return;
+  fsd->exportDot(fname);
 }
 
 void MainWindow::quit()

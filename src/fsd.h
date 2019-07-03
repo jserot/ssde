@@ -13,7 +13,8 @@
 #ifndef FSD_H
 #define FSD_H
 
-#include <fstream>
+#include <QFile>
+#include <QTextStream>
 #include <QGraphicsScene>
 
 #include "state.h"
@@ -34,10 +35,10 @@ public:
     enum Mode { InsertState, InsertPseudoState, InsertTransition, InsertLoopTransition, SelectItem, DeleteItem };
 
     explicit Fsd(QWidget *parent = 0);
-    void fromString(const std::string& json_text);
-    std::string toString();
+    void fromString(QString& json_text);
+    QString toString();
 
-    void exportDot(std::ofstream& file);
+    void exportDot(QString fname);
 
     State* initState();
     QList<State*> states();

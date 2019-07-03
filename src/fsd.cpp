@@ -242,9 +242,9 @@ bool Fsd::isItemChange(int type)
     return false;
 }
 
-void Fsd::fromString(const std::string& json_text)
+void Fsd::fromString(QString& json_text)
 {
-    auto json = nlohmann::json::parse(json_text);
+    auto json = nlohmann::json::parse(json_text.toStdString());
 
     clear(); 
     
@@ -283,7 +283,7 @@ void Fsd::fromString(const std::string& json_text)
       }
 }
 
-std::string Fsd::toString()
+QString Fsd::toString()
 {
     nlohmann::json json_res;
 
@@ -311,7 +311,7 @@ std::string Fsd::toString()
         json_res["transitions"].push_back(json);
         }
       }
-    return json_res.dump(2);
+    return QString::fromStdString(json_res.dump(2));
 }
 
 QString dotTransitionLabel(QString label)
@@ -322,39 +322,46 @@ QString dotTransitionLabel(QString label)
   return l.at(0) + "\\n" + QString(n, '_') + "\\n" + l.at(1);
 }
 
-void Fsd::exportDot(std::ofstream& file)
+void Fsd::exportDot(QString fname)
 {
-  file << "digraph main {\n";
-  file << "layout = dot\n";
-  file << "rankdir = UD\n";
-  file << "size = \"8.5,11\"\n";
-  file << "center = 1\n";
-  file << "nodesep = \"0.350000\"\n";
-  file << "ranksep = \"0.400000\"\n";
-  file << "fontsize = 14\n";
-  file << "mindist=1.0\n";
+  QFile file(fname);
+  file.open(QIODevice::WriteOnly | QIODevice::Text);
+  if ( file.error() != QFile::NoError ) {
+    QMessageBox::warning(mainWindow, "","Cannot open file " + file.fileName());
+    return;
+  }
+  QTextStream os(&file);
+  os << "digraph main {\n";
+  os << "layout = dot\n";
+  os << "rankdir = UD\n";
+  os << "size = \"8.5,11\"\n";
+  os << "center = 1\n";
+  os << "nodesep = \"0.350000\"\n";
+  os << "ranksep = \"0.400000\"\n";
+  os << "fontsize = 14\n";
+  os << "mindist=1.0\n";
   for ( const auto item: items() ) {
     if ( item->type() == State::Type ) {
       State* state = qgraphicsitem_cast<State *>(item);
-      std::string id = state->getId().toStdString();
+      QString id = state->getId();
       if ( state->isPseudo() ) 
-      file << id << " [shape=point]\n";
+      os << id << " [shape=point]\n";
       else
-        file << id << " [label=\"" << id << "\", shape=circle, style=solid]\n";
+        os << id << " [label=\"" << id << "\", shape=circle, style=solid]\n";
       }
     }
   for ( const auto item: items() ) {
     if ( item->type() == Transition::Type ) {
       Transition* transition = qgraphicsitem_cast<Transition *>(item);
-      std::string src_id = transition->srcState()->getId().toStdString();
-      std::string dst_id = transition->dstState()->getId().toStdString();
-      std::string label = dotTransitionLabel(transition->getLabel()).toStdString();
+      QString src_id = transition->srcState()->getId();
+      QString dst_id = transition->dstState()->getId();
+      QString label = dotTransitionLabel(transition->getLabel());
       if ( transition->isInitial() ) 
-        file << src_id << " -> " << dst_id << "\n";
+        os << src_id << " -> " << dst_id << "\n";
       else
-        file << src_id << " -> " << dst_id << " [label=\"" << label << "\"]\n";
+        os << src_id << " -> " << dst_id << " [label=\"" << label << "\"]\n";
       }
     }
-  file << "}\n";
+  os << "}\n";
 }
 

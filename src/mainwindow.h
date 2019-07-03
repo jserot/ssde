@@ -65,7 +65,7 @@ private:
     void createPropertiesPanel();
 
     void checkUnsavedChanges();
-    void saveToFile(std::string fname);
+    void saveToFile(QString fname);
     
     Fsd *fsd;
     QGraphicsView *view;
@@ -87,7 +87,7 @@ private:
     QButtonGroup *toolSet;
 
     bool unsaved_changes;
-    std::string currentFileName;
+    QString currentFileName;
 
     static QString title;
     
