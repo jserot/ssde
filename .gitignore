@@ -9,5 +9,5 @@ CHANGELOG.txt
 README.txt
 README.html
 binaries/
-config
+./config
 etc/doc/
