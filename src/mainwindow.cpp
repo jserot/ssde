@@ -18,8 +18,15 @@
 #include <QtWidgets>
 #include <QFile>
 #include <QTextStream>
+#include "QGVScene.h"
+#include "QGVNode.h"
+#include "QGVEdge.h"
+// #include "QGVSubGraph.h"
 
 QString MainWindow::title = "FSD Editor";
+
+int MainWindow::scene_width = 500;
+int MainWindow::scene_height = 1000;
 
 MainWindow::MainWindow()
 {
@@ -27,7 +34,7 @@ MainWindow::MainWindow()
     createMenus();
 
     fsd = new Fsd(this);
-    fsd->setSceneRect(QRectF(0, 0, 400, 600));
+    fsd->setSceneRect(QRectF(0, 0, scene_width, scene_height));
     // connect(fsd, SIGNAL(stateInserted(State*)), this, SLOT(stateInserted(State*)));
     // connect(fsd, SIGNAL(transitionInserted(Transition*)), this, SLOT(transitionInserted(Transition*)));
     connect(fsd, SIGNAL(stateSelected(State*)), this, SLOT(stateSelected(State*)));
@@ -36,12 +43,21 @@ MainWindow::MainWindow()
     createToolbar();
 
     QHBoxLayout *layout = new QHBoxLayout;
+
+    createPropertiesPanel();
+    layout->addWidget(properties_panel);
+
     view = new QGraphicsView(fsd);
     view->setMinimumWidth(200);
     view->setMinimumHeight(400);
-    createPropertiesPanel();
     layout->addWidget(view);
-    layout->addWidget(properties_panel);
+
+    dotScene = new QGVScene("DOT", this);
+    dotScene->setSceneRect(QRectF(0, 0, scene_width, scene_height));
+    dotView = new QGraphicsView(dotScene);
+    dotView->setMinimumWidth(200);
+    dotView->setMinimumHeight(400);
+    layout->addWidget(dotView);
 
     QWidget *widget = new QWidget;
     widget->setLayout(layout);
@@ -51,6 +67,7 @@ MainWindow::MainWindow()
     setUnifiedTitleAndToolBarOnMac(true);
 
     unsaved_changes = false;
+    zoomFactor = 1.0;
 }
 
 void MainWindow::toolButtonClicked(int)
@@ -114,7 +131,20 @@ void MainWindow::createActions()
     connect(exitAction, SIGNAL(triggered()), this, SLOT(quit()));
 
     exportDotAction = new QAction(tr("E&xport to DOT"), this);
+    exportDotAction->setShortcut(tr("Ctrl+E"));
     connect(exportDotAction, SIGNAL(triggered()), this, SLOT(exportDot()));
+
+    renderDotAction = new QAction(tr("Draw dOT"), this);
+    renderDotAction->setShortcut(tr("Ctrl+R"));
+    connect(renderDotAction, SIGNAL(triggered()), this, SLOT(renderDot()));
+
+    zoomInAction = new QAction(tr("Zoom In"), this);
+    zoomInAction->setShortcut(tr("Ctrl++"));
+    connect(zoomInAction, SIGNAL(triggered()), this, SLOT(zoomIn()));
+
+    zoomOutAction = new QAction(tr("Zoom Out"), this);
+    zoomOutAction->setShortcut(tr("Ctrl+-"));
+    connect(zoomOutAction, SIGNAL(triggered()), this, SLOT(zoomOut()));
 }
 
 void MainWindow::createMenus()
@@ -127,8 +157,11 @@ void MainWindow::createMenus()
     fileMenu->addAction(aboutAction);
     fileMenu->addAction(exitAction);
 
-    exportMenu = menuBar()->addMenu(tr("&Export"));
-    exportMenu->addAction(exportDotAction);
+    dotMenu = menuBar()->addMenu(tr("&Dot"));
+    dotMenu->addAction(exportDotAction);
+    dotMenu->addAction(renderDotAction);
+    dotMenu->addAction(zoomInAction);
+    dotMenu->addAction(zoomOutAction);
 }
 
 void MainWindow::createToolbar()
@@ -136,27 +169,27 @@ void MainWindow::createToolbar()
     QToolButton *selectButton = new QToolButton;
     selectButton->setCheckable(true);
     selectButton->setChecked(true);
-    selectButton->setIcon(QIcon(":/images/select.png"));
+    selectButton->setIcon(QIcon(":/icons/select.png"));
     selectButton->setToolTip("Select or move items");
     QToolButton *addStateButton = new QToolButton;
     addStateButton->setCheckable(true);
-    addStateButton->setIcon(QIcon(":/images/state.png"));
+    addStateButton->setIcon(QIcon(":/icons/state.png"));
     addStateButton->setToolTip("Add state");
     QToolButton *addPseudoStateButton = new QToolButton;
     addPseudoStateButton->setCheckable(true);
-    addPseudoStateButton->setIcon(QIcon(":/images/initstate.png"));
+    addPseudoStateButton->setIcon(QIcon(":/icons/initstate.png"));
     addPseudoStateButton->setToolTip("Add initial transition");
     QToolButton *addTransitionButton = new QToolButton;
     addTransitionButton->setCheckable(true);
-    addTransitionButton->setIcon(QIcon(":/images/transition.png"));
+    addTransitionButton->setIcon(QIcon(":/icons/transition.png"));
     addTransitionButton->setToolTip("Add transition between two states");
     QToolButton *addLoopTransitionButton = new QToolButton;
     addLoopTransitionButton->setCheckable(true);
-    addLoopTransitionButton->setIcon(QIcon(":/images/loop.png"));
+    addLoopTransitionButton->setIcon(QIcon(":/icons/loop.png"));
     addLoopTransitionButton->setToolTip("Add self transition");
     QToolButton *deleteButton = new QToolButton;
     deleteButton->setCheckable(true);
-    deleteButton->setIcon(QIcon(":/images/delete.png"));
+    deleteButton->setIcon(QIcon(":/icons/delete.png"));
     deleteButton->setToolTip("Delete items");
 
     toolSet = new QButtonGroup(this);
@@ -166,7 +199,7 @@ void MainWindow::createToolbar()
     toolSet->addButton(addTransitionButton, int(Fsd::InsertTransition));
     toolSet->addButton(addLoopTransitionButton, int(Fsd::InsertLoopTransition));
     toolSet->addButton(deleteButton, int(Fsd::DeleteItem));
-    connect(toolSet, SIGNAL(buttonClicked(int)), this, SLOT(toolButtonClicked(int)));
+    connect(toolSet, SIGNAL(idClicked(int)), this, SLOT(toolButtonClicked(int)));
 
     toolBar = addToolBar(tr("Tools"));
     toolBar->addWidget(selectButton);
@@ -220,6 +253,7 @@ void MainWindow::openFile()
   QTextStream is(&file);
   QString txt = is.readAll();
   fsd->fromString(txt);
+  view->ensureVisible(fsd->itemsBoundingRect());
   properties_panel->clear();
   currentFileName = fname;
   setUnsavedChanges(false);
@@ -266,6 +300,40 @@ void MainWindow::exportDot()
   if ( fname.isEmpty() ) return;
   fsd->exportDot(fname);
 }
+
+void MainWindow::renderDot()
+{
+  // dotScene->clear();  // This does not reset the state of the scene. Hence, re-added items will be offset :(
+  delete dotScene;
+  dotScene = new QGVScene("DOT", this);
+  dotScene->setSceneRect(QRectF(0, 0, scene_width, scene_height));
+  dotView->setScene(dotScene);
+  fsd->renderDot(dotScene);
+  dotScene->applyLayout();
+  //dotView->fitInView(dotScene->sceneRect(), Qt::KeepAspectRatio);
+  dotView->ensureVisible(dotScene->itemsBoundingRect());
+}
+
+void MainWindow::zoomIn()
+{
+  zoom(1.25);
+}
+
+void MainWindow::zoomOut()
+{
+  zoom(0.8);
+}
+
+void MainWindow::zoom(double factor)
+{
+  zoomFactor *= factor;
+  // qDebug() << "zoomFactor=" << zoomFactor;
+  dotView->scale(factor, factor);
+  dotView->ensureVisible(dotScene->itemsBoundingRect());
+  zoomInAction->setEnabled(zoomFactor < 3.0);
+  zoomOutAction->setEnabled(zoomFactor > 0.33);
+}
+
 
 void MainWindow::quit()
 {

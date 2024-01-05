@@ -15,7 +15,10 @@
 #include "include/nlohmann_json.h"
 #include <QMessageBox>
 #include <QGraphicsSceneMouseEvent>
-#include <qDebug>
+#include <QDebug>
+#include "QGVScene.h"
+#include "QGVNode.h"
+#include "QGVEdge.h"
 
 int Fsd::stateCounter = 0;
 QColor Fsd::lineColor = Qt::lightGray;
@@ -251,7 +254,7 @@ void Fsd::fromString(QString& json_text)
     QMap<std::string, State*> states;
     stateCounter = 0;
 
-    for ( const auto json_state : json.at("states") ) {
+    for ( auto json_state : json.at("states") ) {
       std::string id = json_state.at("id");
       State* state;
       if ( id == State::initPseudoId.toStdString() )
@@ -262,7 +265,7 @@ void Fsd::fromString(QString& json_text)
       stateCounter++;
       }   
 
-    for ( const auto json_transition : json.at("transitions") ) {
+    for ( auto json_transition : json.at("transitions") ) {
       std::string src_state = json_transition.at("src_state");
       std::string dst_state = json_transition.at("dst_state");
       std::string label = json_transition.at("label");
@@ -314,12 +317,14 @@ QString Fsd::toString()
     return QString::fromStdString(json_res.dump(2));
 }
 
-QString dotTransitionLabel(QString label)
+QString dotTransitionLabel(QString label, QString lrpad)
 {
   QStringList l = label.split("/");
   if ( l.length() != 2 ) return label;
   int n = std::max(l.at(0).length(), l.at(1).length());
-  return l.at(0) + "\\n" + QString(n, '_') + "\\n" + l.at(1);
+  return lrpad + l.at(0) + lrpad
+       + "\n" + lrpad + QString(n, '_') + lrpad  + "\n"
+       + lrpad + l.at(1) + lrpad;
 }
 
 void Fsd::exportDot(QString fname)
@@ -355,7 +360,7 @@ void Fsd::exportDot(QString fname)
       Transition* transition = qgraphicsitem_cast<Transition *>(item);
       QString src_id = transition->srcState()->getId();
       QString dst_id = transition->dstState()->getId();
-      QString label = dotTransitionLabel(transition->getLabel());
+      QString label = dotTransitionLabel(transition->getLabel(),"");
       if ( transition->isInitial() ) 
         os << src_id << " -> " << dst_id << "\n";
       else
@@ -363,5 +368,54 @@ void Fsd::exportDot(QString fname)
       }
     }
   os << "}\n";
+}
+
+void Fsd::renderDot(QGVScene *dotScene)
+{
+  dotScene->setGraphAttribute("rankdir", "UD");
+  dotScene->setGraphAttribute("nodesep", "0.55");
+  dotScene->setGraphAttribute("ranksep", "0.95");
+  dotScene->setGraphAttribute("fontsize", "14");
+  dotScene->setGraphAttribute("mindist", "1.0");
+  dotScene->setNodeAttribute("shape", "circle");
+  dotScene->setNodeAttribute("style", "solid");
+
+  QMap<QString,QGVNode*> nodes;
+
+  for ( const auto item: items() ) {
+    if ( item->type() == State::Type ) {
+      State* state = qgraphicsitem_cast<State *>(item);
+      QString id = state->getId();
+      QGVNode *node = dotScene->addNode(id);
+      if ( state->isPseudo() ) {
+        node->setAttribute("shape", "none"); 
+        node->setAttribute("label", "");
+        }
+      nodes.insert(id,node);
+      }
+    }
+  for ( const auto item: items() ) {
+    if ( item->type() == Transition::Type ) {
+      Transition* transition = qgraphicsitem_cast<Transition *>(item);
+      QString src_id = transition->srcState()->getId();
+      QString dst_id = transition->dstState()->getId();
+      QString label = transition->isInitial() ? "" : dotTransitionLabel(transition->getLabel(),"  ");
+      if ( nodes.contains(src_id) && nodes.contains(dst_id) ) {
+        QGVEdge* edge = dotScene->addEdge(nodes[src_id], nodes[dst_id], label);
+        Q_UNUSED(edge);
+        //qDebug() << "Added edge " << src_id << " -> " << dst_id << " [" << edge->label() << "]";
+      }
+    }
+  }
+
+  // Fixed example for debug
+  // QGVNode *_init = dotScene->addNode("");
+  // _init->setAttribute("shape","none");
+  // QGVNode *stopped = dotScene->addNode("Stopped");
+  // QGVNode *running = dotScene->addNode("Running");
+  // dotScene->addEdge(_init, stopped, "");
+  // dotScene->addEdge(stopped, running, "  StartStop  \n  _________  \n  c:=0  ");
+  // dotScene->addEdge(running, stopped, "  StartStop  ");
+  // dotScene->addEdge(running, running, "  H  \n  ______  \n  c:=c+1  ");
 }
 

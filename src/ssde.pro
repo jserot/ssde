@@ -1,13 +1,17 @@
-TEMPLATE = app
-TARGET = ssde
-INCLUDEPATH += .
+QT       += widgets core gui
 
-QT       += core gui
-QT 		 += widgets
+QMAKE_PROJECT_NAME = ssde
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 12.6
 
-CONFIG += c++11
+LIBS += -L../qgv/lib -lQGVCore
+INCLUDEPATH += ../qgv/QGVCore
+DEPENDPATH += ../gqv/QGVCore
 
-# Input
+#GraphViz librairie
+!include(../qgv/QGVCore/GraphViz.pri) {
+     error("fail open GraphViz.pri")
+ }
+
 HEADERS += include/nlohmann_json.h \
            transition.h  \
            state.h  \

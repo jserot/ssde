@@ -2,36 +2,27 @@ include config
 
 APPNAME=ssde
 
-QMAKE_MACOS = /Developer/Qt5.8/5.8/clang_64/bin/qmake 
+#QMAKE_MACOS = /Developer/Qt5.8/5.8/clang_64/bin/qmake 
+QMAKE_MACOS = /Users/jserot/Qt/6.3.1/macos/bin/qmake
 QMAKE_WIN = C:/Qt/Qt5.8.0/5.8/mingw53_32/bin/qmake.exe
 MAKE_WIN = C:/Qt/Qt5.8.0/Tools/mingw530_32/bin/mingw32-make
 QMAKE_UNIX=qmake
 
-.PHONY: app clean install dist doc html
+.PHONY: app clean install dist 
 
 all: app 
 
 app:
 ifeq ($(PLATFORM), win32)
-	(cd src; $(QMAKE_WIN) -spec win32-g++ main.pro; $(MAKE_WIN))
+	(cd src; $(QMAKE_WIN) -spec win32-g++ ssde.pro; $(MAKE_WIN))
 endif
 ifeq ($(PLATFORM), macos)
-	(cd src; $(QMAKE_MACOS) -spec macx-clang CONFIG+=x86_64 main.pro; make)
+	(cd src; $(QMAKE_MACOS) -spec macx-clang CONFIG+=arm64 ssde.pro; make)
+#	(cd src; $(QMAKE_MACOS) -spec macx-clang CONFIG+=x86_64 ssde.pro; make)
 endif
 ifeq ($(PLATFORM), unix)
-	(cd src; $(QMAKE_UNIX) main.pro; make)
+	(cd src; $(QMAKE_UNIX) ssde.pro; make)
 endif
-
-doc:
-	pandoc -o CHANGELOG.txt CHANGELOG.md
-	pandoc -o CHANGELOG.html CHANGELOG.md
-	pandoc -o README.txt README.md
-	pandoc -o README.html README.md
-
-html:
-	pandoc -o README.html README.md
-	open -a Safari README.html
-
 
 clean:
 	(cd src; make clean)

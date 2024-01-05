@@ -18,6 +18,8 @@
 
 #include <QMainWindow>
 #include <QFrame>
+#include "QGVScene.h"
+#include "QGVNode.h"
 
 class Fsd;
 
@@ -40,13 +42,16 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+  static int scene_width;
+  static int scene_height;
+
 public:
    MainWindow();
 
 private slots:
     void toolButtonClicked(int id);
-    /* void stateInserted(State *); */
-    /* void transitionInserted(State *); */
+    // void stateInserted(State *);
+    // void transitionInserted(State *);
     void stateSelected(State *);
     void transitionSelected(Transition *);
     void fsdModified();
@@ -57,6 +62,10 @@ private slots:
     void quit();
     void about();
     void exportDot();
+    void renderDot();
+    void zoomIn();
+    void zoomOut();
+    void zoom(double factor);
 
 private:
     void createActions();
@@ -68,7 +77,10 @@ private:
     void saveToFile(QString fname);
     
     Fsd *fsd;
+    QGVScene *dotScene;
+    double zoomFactor;
     QGraphicsView *view;
+    QGraphicsView *dotView;
     PropertiesPanel* properties_panel;
 
     QAction *newDiagramAction;
@@ -78,10 +90,13 @@ private:
     QAction *aboutAction;
     QAction *exitAction;
     QAction *exportDotAction;
+    QAction *renderDotAction;
+    QAction *zoomInAction;
+    QAction *zoomOutAction;
 
     QMenu *aboutMenu;
     QMenu *fileMenu;
-    QMenu *exportMenu;
+    QMenu *dotMenu;
 
     QToolBar *toolBar;
     QButtonGroup *toolSet;

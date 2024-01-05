@@ -25,6 +25,7 @@ class QPointF;
 class QGraphicsLineItem;
 class QFont;
 class QColor;
+class QGVScene;
 QT_END_NAMESPACE
 
 class Fsd : public QGraphicsScene
@@ -39,6 +40,7 @@ public:
     QString toString();
 
     void exportDot(QString fname);
+    void renderDot(QGVScene *scene);
 
     State* initState();
     QList<State*> states();

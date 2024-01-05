@@ -31,7 +31,7 @@
 #include <QVBoxLayout>
 #include <stdexcept>
 #include <QMessageBox>
-#include <qDebug>
+#include <QDebug>
 
 PropertiesPanel::PropertiesPanel(MainWindow* parent) : QFrame(parent)
 {

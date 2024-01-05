@@ -1,10 +1,10 @@
 <RCC>
     <qresource>
-        <file>images/delete.png</file>
-        <file>images/state.png</file>
-        <file>images/initstate.png</file>
-        <file>images/transition.png</file>
-        <file>images/loop.png</file>
-        <file>images/select.png</file>
+        <file>icons/delete.png</file>
+        <file>icons/state.png</file>
+        <file>icons/initstate.png</file>
+        <file>icons/transition.png</file>
+        <file>icons/loop.png</file>
+        <file>icons/select.png</file>
     </qresource>
 </RCC>
