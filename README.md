@@ -43,13 +43,13 @@ Everything should be rather intuitive..
 ### Rendering and exporting
 
 * The current diagram can be rendered using the [DOT](http://www.graphviz.org) engine invoking the
-  `Draw DOT` action in the `DOT` menu.
+  `Draw` action in the `DOT` menu.
 * The current diagram can be exported to [DOT](http://www.graphviz.org) format by invoking the `Export`
   action in the `Export` menu.
 
 **Note**. In-app DOT rendering uses the [QGV](https://github.com/nbergont/qgv/) library which,
 itself, relies on the `graphviz` library. Both libraries have limitations -- wrt. the DOT language
--- which sometimes rendering a bit crude. For best results, export the diagram to DOT format and
+-- which sometimes make rendering a bit crude. For best results, export the diagram to DOT format and
 view it using the `graphviz` application. 
 
 ## INSTALLATION
