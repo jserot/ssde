@@ -3,12 +3,12 @@ QT       += widgets core gui
 QMAKE_PROJECT_NAME = ssde
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 12.6
 
-LIBS += -L../qgv/lib -lQGVCore
-INCLUDEPATH += ../qgv/QGVCore
-DEPENDPATH += ../gqv/QGVCore
+LIBS += -L../../qgv/lib -lQGVCore
+INCLUDEPATH += ../../qgv/QGVCore
+DEPENDPATH += ../../gqv/QGVCore
 
 #GraphViz librairie
-!include(../qgv/QGVCore/GraphViz.pri) {
+!include(../../qgv/QGVCore/GraphViz.pri) {
      error("fail open GraphViz.pri")
  }
 

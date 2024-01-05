@@ -17,7 +17,7 @@ CXX           = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefau
 DEFINES       = -DWITH_CGRAPH -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.6 -Wall -Wextra -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -stdlib=libc++ -DQGVCORE_LIB -O2 -std=gnu++1z $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.6 -Wall -Wextra -fPIC $(DEFINES)
-INCPATH       = -I. -I../qgv/QGVCore -Iprivate -I/opt/homebrew/Cellar/graphviz/9.0.0/include/graphviz -I../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers -I../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers -I../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/AGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/AGL.framework/Headers -I../../../../Qt/6.3.1/macos/mkspecs/macx-clang -F/Users/jserot/Qt/6.3.1/macos/lib
+INCPATH       = -I. -I../../qgv/QGVCore -Iprivate -I/opt/homebrew/Cellar/graphviz/9.0.0/include/graphviz -I../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers -I../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers -I../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/AGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/AGL.framework/Headers -I../../../../Qt/6.3.1/macos/mkspecs/macx-clang -F/Users/jserot/Qt/6.3.1/macos/lib
 QMAKE         = /Users/jserot/Qt/6.3.1/macos/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -40,7 +40,7 @@ DISTNAME      = ssde1.0.0
 DISTDIR = /Users/jserot/Dev/Qt/ssde/src/.tmp/ssde1.0.0
 LINK          = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 LFLAGS        = -stdlib=libc++ -headerpad_max_install_names $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.6 -Wl,-rpath,@executable_path/../Frameworks -Wl,-rpath,/Users/jserot/Qt/6.3.1/macos/lib
-LIBS          = $(SUBLIBS) -F/Users/jserot/Qt/6.3.1/macos/lib -L../qgv/lib -lQGVCore -L/opt/homebrew/Cellar/graphviz/9.0.0/lib -lgvc -lcgraph -lcdt -framework QtWidgets -framework QtGui -framework AppKit -framework ImageIO -framework Metal -framework QtCore -framework DiskArbitration -framework IOKit -framework AGL -framework OpenGL   
+LIBS          = $(SUBLIBS) -F/Users/jserot/Qt/6.3.1/macos/lib -L../../qgv/lib -lQGVCore -L/opt/homebrew/Cellar/graphviz/9.0.0/lib -lgvc -lcgraph -lcdt -framework QtWidgets -framework QtGui -framework AppKit -framework ImageIO -framework Metal -framework QtCore -framework DiskArbitration -framework IOKit -framework AGL -framework OpenGL   
 AR            = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar cq
 RANLIB        = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib -s
 SED           = sed
@@ -294,7 +294,7 @@ DIST          = ../../../../Qt/6.3.1/macos/mkspecs/features/spec_pre.prf \
 		../../../../Qt/6.3.1/macos/mkspecs/features/mac/toolchain.prf \
 		../../../../Qt/6.3.1/macos/mkspecs/features/default_pre.prf \
 		../../../../Qt/6.3.1/macos/mkspecs/features/mac/default_pre.prf \
-		../qgv/QGVCore/GraphViz.pri \
+		../../qgv/QGVCore/GraphViz.pri \
 		../../../../Qt/6.3.1/macos/mkspecs/features/resolve_config.prf \
 		../../../../Qt/6.3.1/macos/mkspecs/features/default_post.prf \
 		../../../../Qt/6.3.1/macos/mkspecs/features/mac/default_post.prf \
@@ -575,7 +575,7 @@ Makefile: ssde.pro ../../../../Qt/6.3.1/macos/mkspecs/macx-clang/qmake.conf ../.
 		../../../../Qt/6.3.1/macos/mkspecs/features/mac/toolchain.prf \
 		../../../../Qt/6.3.1/macos/mkspecs/features/default_pre.prf \
 		../../../../Qt/6.3.1/macos/mkspecs/features/mac/default_pre.prf \
-		../qgv/QGVCore/GraphViz.pri \
+		../../qgv/QGVCore/GraphViz.pri \
 		../../../../Qt/6.3.1/macos/mkspecs/features/resolve_config.prf \
 		../../../../Qt/6.3.1/macos/mkspecs/features/default_post.prf \
 		../../../../Qt/6.3.1/macos/mkspecs/features/mac/default_post.prf \
@@ -827,7 +827,7 @@ Makefile: ssde.pro ../../../../Qt/6.3.1/macos/mkspecs/macx-clang/qmake.conf ../.
 ../../../../Qt/6.3.1/macos/mkspecs/features/mac/toolchain.prf:
 ../../../../Qt/6.3.1/macos/mkspecs/features/default_pre.prf:
 ../../../../Qt/6.3.1/macos/mkspecs/features/mac/default_pre.prf:
-../qgv/QGVCore/GraphViz.pri:
+../../qgv/QGVCore/GraphViz.pri:
 ../../../../Qt/6.3.1/macos/mkspecs/features/resolve_config.prf:
 ../../../../Qt/6.3.1/macos/mkspecs/features/default_post.prf:
 ../../../../Qt/6.3.1/macos/mkspecs/features/mac/default_post.prf:
@@ -942,7 +942,7 @@ moc_fsd.cpp: fsd.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QList \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qlist.h \
 		../../../../Qt/6.3.1/macos/libexec/moc
-	/Users/jserot/Qt/6.3.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=13 -D__clang_minor__=1 -D__clang_patchlevel__=6 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/jserot/Qt/6.3.1/macos/mkspecs/macx-clang -I/Users/jserot/Dev/Qt/ssde/src -I/Users/jserot/Dev/Qt/ssde/qgv/QGVCore -I/Users/jserot/Dev/Qt/ssde/src/private -I/opt/homebrew/Cellar/graphviz/9.0.0/include/graphviz -I/Users/jserot/Qt/6.3.1/macos/lib/QtWidgets.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtGui.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/jserot/Qt/6.3.1/macos/lib fsd.h -o moc_fsd.cpp
+	/Users/jserot/Qt/6.3.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=13 -D__clang_minor__=1 -D__clang_patchlevel__=6 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/jserot/Qt/6.3.1/macos/mkspecs/macx-clang -I/Users/jserot/Dev/Qt/ssde/src -I/Users/jserot/Dev/Qt/qgv/QGVCore -I/Users/jserot/Dev/Qt/ssde/src/private -I/opt/homebrew/Cellar/graphviz/9.0.0/include/graphviz -I/Users/jserot/Qt/6.3.1/macos/lib/QtWidgets.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtGui.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/jserot/Qt/6.3.1/macos/lib fsd.h -o moc_fsd.cpp
 
 moc_properties.cpp: properties.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QComboBox \
@@ -962,7 +962,7 @@ moc_properties.cpp: properties.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QStringListModel \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qstringlistmodel.h \
 		../../../../Qt/6.3.1/macos/libexec/moc
-	/Users/jserot/Qt/6.3.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=13 -D__clang_minor__=1 -D__clang_patchlevel__=6 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/jserot/Qt/6.3.1/macos/mkspecs/macx-clang -I/Users/jserot/Dev/Qt/ssde/src -I/Users/jserot/Dev/Qt/ssde/qgv/QGVCore -I/Users/jserot/Dev/Qt/ssde/src/private -I/opt/homebrew/Cellar/graphviz/9.0.0/include/graphviz -I/Users/jserot/Qt/6.3.1/macos/lib/QtWidgets.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtGui.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/jserot/Qt/6.3.1/macos/lib properties.h -o moc_properties.cpp
+	/Users/jserot/Qt/6.3.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=13 -D__clang_minor__=1 -D__clang_patchlevel__=6 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/jserot/Qt/6.3.1/macos/mkspecs/macx-clang -I/Users/jserot/Dev/Qt/ssde/src -I/Users/jserot/Dev/Qt/qgv/QGVCore -I/Users/jserot/Dev/Qt/ssde/src/private -I/opt/homebrew/Cellar/graphviz/9.0.0/include/graphviz -I/Users/jserot/Qt/6.3.1/macos/lib/QtWidgets.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtGui.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/jserot/Qt/6.3.1/macos/lib properties.h -o moc_properties.cpp
 
 moc_mainwindow.cpp: mainwindow.h \
 		state.h \
@@ -988,17 +988,17 @@ moc_mainwindow.cpp: mainwindow.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qstringlistmodel.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		../qgv/QGVCore/QGVScene.h \
-		../qgv/QGVCore/qgv.h \
+		../../qgv/QGVCore/QGVScene.h \
+		../../qgv/QGVCore/qgv.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QtGlobal \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qglobal.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsScene \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgraphicsscene.h \
-		../qgv/QGVCore/QGVNode.h \
+		../../qgv/QGVCore/QGVNode.h \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/QPen \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/qpen.h \
 		../../../../Qt/6.3.1/macos/libexec/moc
-	/Users/jserot/Qt/6.3.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=13 -D__clang_minor__=1 -D__clang_patchlevel__=6 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/jserot/Qt/6.3.1/macos/mkspecs/macx-clang -I/Users/jserot/Dev/Qt/ssde/src -I/Users/jserot/Dev/Qt/ssde/qgv/QGVCore -I/Users/jserot/Dev/Qt/ssde/src/private -I/opt/homebrew/Cellar/graphviz/9.0.0/include/graphviz -I/Users/jserot/Qt/6.3.1/macos/lib/QtWidgets.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtGui.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/jserot/Qt/6.3.1/macos/lib mainwindow.h -o moc_mainwindow.cpp
+	/Users/jserot/Qt/6.3.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=13 -D__clang_minor__=1 -D__clang_patchlevel__=6 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/jserot/Qt/6.3.1/macos/mkspecs/macx-clang -I/Users/jserot/Dev/Qt/ssde/src -I/Users/jserot/Dev/Qt/qgv/QGVCore -I/Users/jserot/Dev/Qt/ssde/src/private -I/opt/homebrew/Cellar/graphviz/9.0.0/include/graphviz -I/Users/jserot/Qt/6.3.1/macos/lib/QtWidgets.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtGui.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/jserot/Qt/6.3.1/macos/lib mainwindow.h -o moc_mainwindow.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1077,15 +1077,15 @@ fsd.o: fsd.cpp fsd.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgraphicssceneevent.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QDebug \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qdebug.h \
-		../qgv/QGVCore/QGVScene.h \
-		../qgv/QGVCore/qgv.h \
+		../../qgv/QGVCore/QGVScene.h \
+		../../qgv/QGVCore/qgv.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QtGlobal \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qglobal.h \
-		../qgv/QGVCore/QGVNode.h \
+		../../qgv/QGVCore/QGVNode.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsItem \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/QPen \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/qpen.h \
-		../qgv/QGVCore/QGVEdge.h
+		../../qgv/QGVCore/QGVEdge.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fsd.o fsd.cpp
 
 properties.o: properties.cpp properties.h \
@@ -1112,13 +1112,13 @@ properties.o: properties.cpp properties.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qlist.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		../qgv/QGVCore/QGVScene.h \
-		../qgv/QGVCore/qgv.h \
+		../../qgv/QGVCore/QGVScene.h \
+		../../qgv/QGVCore/qgv.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QtGlobal \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qglobal.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsScene \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgraphicsscene.h \
-		../qgv/QGVCore/QGVNode.h \
+		../../qgv/QGVCore/QGVNode.h \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/QPen \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/qpen.h \
 		transition.h \
@@ -1168,13 +1168,13 @@ main.o: main.cpp mainwindow.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qstringlistmodel.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		../qgv/QGVCore/QGVScene.h \
-		../qgv/QGVCore/qgv.h \
+		../../qgv/QGVCore/QGVScene.h \
+		../../qgv/QGVCore/qgv.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QtGlobal \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qglobal.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsScene \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgraphicsscene.h \
-		../qgv/QGVCore/QGVNode.h \
+		../../qgv/QGVCore/QGVNode.h \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/QPen \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/qpen.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QApplication \
@@ -1215,11 +1215,11 @@ mainwindow.o: mainwindow.cpp transition.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qstringlistmodel.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		../qgv/QGVCore/QGVScene.h \
-		../qgv/QGVCore/qgv.h \
+		../../qgv/QGVCore/QGVScene.h \
+		../../qgv/QGVCore/qgv.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QtGlobal \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qglobal.h \
-		../qgv/QGVCore/QGVNode.h \
+		../../qgv/QGVCore/QGVNode.h \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/QPen \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/qpen.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QtWidgets \
@@ -1336,7 +1336,7 @@ mainwindow.o: mainwindow.cpp transition.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qwidgetaction.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qwizard.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qtwidgetsversion.h \
-		../qgv/QGVCore/QGVEdge.h
+		../../qgv/QGVCore/QGVEdge.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 qrc_resources.o: qrc_resources.cpp 
