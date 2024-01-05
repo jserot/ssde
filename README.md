@@ -40,10 +40,17 @@ Everything should be rather intuitive..
 
 * The `New` action in the `File` menu clears the diagram
 
-### Exporting
+### Rendering and exporting
 
-* The current diagram can be exported to [DOT](http://www.graphviz.org) format by invoking the `Export DOT`
+* The current diagram can be rendered using the [DOT](http://www.graphviz.org) engine invoking the
+  `Draw DOT` action in the `DOT` menu.
+* The current diagram can be exported to [DOT](http://www.graphviz.org) format by invoking the `Export`
   action in the `Export` menu.
+
+**Note**. In-app DOT rendering uses the [QGV](https://github.com/nbergont/qgv/) library which,
+itself, relies on the `graphviz` library. Both libraries have limitations -- wrt. the DOT language
+-- which sometimes rendering a bit crude. For best results, export the diagram to DOT format and
+view it using the `graphviz` application. 
 
 ## INSTALLATION
 
@@ -53,4 +60,7 @@ See the `INSTALL` file to build from sources.
 
 ### Credits
 
-This project was inspired by some code written by A. Deterne and L. Malka.
+The initial project was inspired by some code written by A. Deterne and L. Malka.
+
+The project uses the [QGV](https://github.com/nbergont/qgv) library, which is no longer supported,
+with some minor modifications and bug fixes. 
