@@ -60,7 +60,7 @@ macos-install:
 	cp ./dist/macos/INSTALL $(MACOS_DIST)/INSTALL
 	mkdir $(MACOS_DIST)/examples
 	cp -r examples/*.fsd $(MACOS_DIST)/examples
-	cp {CHANGELOG.txt,KNOWN-BUGS,LICENSE,README.txt} $(MACOS_DIST)
+	cp {KNOWN-BUGS,LICENSE} $(MACOS_DIST)
 
 SSDE_VOLUME=Ssde-$(VERSION)
 
@@ -72,7 +72,7 @@ macos-installer:
 	cp -r $(MACOS_DIST)/Ssde.app /Volumes/$(SSDE_VOLUME)
 	ln -s /Applications /Volumes/$(SSDE_VOLUME)/Applications
 	cp -r $(MACOS_DIST)/examples /Volumes/$(SSDE_VOLUME)/Examples
-	cp $(MACOS_DIST)/{CHANGELOG.txt,KNOWN-BUGS,LICENSE,README.txt,INSTALL} /Volumes/$(SSDE_VOLUME)
+	cp $(MACOS_DIST)/{KNOWN-BUGS,LICENSE,INSTALL} /Volumes/$(SSDE_VOLUME)
 	hdiutil detach /Volumes/$(SSDE_VOLUME)
 	hdiutil convert /tmp/Ssde.dmg -format UDZO -o /tmp/Ssde_ro.dmg
 	@echo "** Copying disk image into ./binaries"
@@ -116,7 +116,7 @@ win32-install:
 	cp $(DLL_REPO)/{Qt5Core,Qt5Gui,Qt5Widgets,libgcc_s_dw2-1,libstdc++-6,libwinpthread-1}.dll $(WIN_INSTALL_DIR)
 	mkdir $(WIN_INSTALL_DIR)/platforms
 	cp $(DLL_REPO)/qwindows.dll $(WIN_INSTALL_DIR)/platforms
-	cp {CHANGELOG.txt,KNOWN-BUGS,LICENSE,README.txt} $(WIN_INSTALL_DIR)
+	cp {KNOWN-BUGS,LICENSE} $(WIN_INSTALL_DIR)
 	cp ./dist/windows/icons/*.{bmp,ico} $(WIN_INSTALL_DIR)
 	mkdir $(WIN_INSTALL_DIR)/examples
 	cp -r examples/*.fsd $(WIN_INSTALL_DIR)/examples
