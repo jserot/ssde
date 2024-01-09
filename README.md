@@ -64,3 +64,8 @@ The initial project was inspired by some code written by A. Deterne and L. Malka
 
 The project uses the [QGV](https://github.com/nbergont/qgv) library, which is no longer supported,
 with some minor modifications and bug fixes. 
+
+### Links
+
+For a more sophisticated state diagram editor, see the
+[rfsm-light](https://github.com/jserot/rfsm-light) project.
