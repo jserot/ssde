@@ -14,7 +14,7 @@
 #include "mainwindow.h"
 #include "state.h"
 #include "transition.h"
-#include "fsd.h"
+#include "model.h"
 
 #include <QComboBox>
 #include <QFrame>
@@ -152,7 +152,7 @@ void PropertiesPanel::setSelectedItem(Transition* transition)
       transition_panel->hide();
       itransition_panel->show();
       itransition_end_state_field->clear();
-      foreach ( State* state, main_window->getFsd()->states() ) {
+      foreach ( State* state, main_window->getModel()->states() ) {
         if ( ! state->isPseudo() ) {
           QString id = state->getId();
           itransition_end_state_field->addItem(id, QVariant(id));
@@ -167,7 +167,7 @@ void PropertiesPanel::setSelectedItem(Transition* transition)
       transition_panel->show();
       transition_start_state_field->clear();
       transition_end_state_field->clear();
-      foreach ( State* state, main_window->getFsd()->states() ) {
+      foreach ( State* state, main_window->getModel()->states() ) {
         if ( ! state->isPseudo() ) {
           QString id = state->getId();
           transition_start_state_field->addItem(id, QVariant(id));
@@ -187,7 +187,7 @@ void PropertiesPanel::setStateName(const QString& name)
     State* state = qgraphicsitem_cast<State*>(selected_item);
     if(state != nullptr) {
         state->setId(name);
-        main_window->getFsd()->update();
+        main_window->getModel()->update();
         main_window->setUnsavedChanges(true);
     }
 }
@@ -198,11 +198,11 @@ void PropertiesPanel::setTransitionSrcState(int index)
   Transition* transition = qgraphicsitem_cast<Transition*>(selected_item);
   if ( transition == nullptr ) return;
   QString state_id = transition_start_state_field->itemText(index);
-  State* state = main_window->getFsd()->getState(state_id);
+  State* state = main_window->getModel()->getState(state_id);
   if ( state == nullptr )
     throw std::invalid_argument(std::string("No state found with id : ") + state_id.toStdString());
   transition->setSrcState(state);
-  main_window->getFsd()->update();
+  main_window->getModel()->update();
   main_window->setUnsavedChanges(true);
 }
 
@@ -212,11 +212,11 @@ void PropertiesPanel::setTransitionDstState(int index)  // TODO: factorize with 
   Transition* transition = qgraphicsitem_cast<Transition*>(selected_item);
   if ( transition == nullptr ) return;
   QString state_id = transition_end_state_field->itemText(index);
-  State* state = main_window->getFsd()->getState(state_id);
+  State* state = main_window->getModel()->getState(state_id);
   if ( state == nullptr )
     throw std::invalid_argument(std::string("No state found with id : ") + state_id.toStdString());
   transition->setDstState(state);
-  main_window->getFsd()->update();
+  main_window->getModel()->update();
   main_window->setUnsavedChanges(true);
 }
 
@@ -226,11 +226,11 @@ void PropertiesPanel::setITransitionDstState(int index)  // TODO: factorize with
   Transition* transition = qgraphicsitem_cast<Transition*>(selected_item);
   if ( transition == nullptr ) return;
   QString state_id = itransition_end_state_field->itemText(index);
-  State* state = main_window->getFsd()->getState(state_id);
+  State* state = main_window->getModel()->getState(state_id);
   if ( state == nullptr )
     throw std::invalid_argument(std::string("No state found with id : ") + state_id.toStdString());
   transition->setDstState(state);
-  main_window->getFsd()->update();
+  main_window->getModel()->update();
   main_window->setUnsavedChanges(true);
 }
 
@@ -239,7 +239,7 @@ void PropertiesPanel::setTransitionLabel(const QString& label)
   Transition* transition = qgraphicsitem_cast<Transition*>(selected_item);
   if ( transition == nullptr ) return;
   transition->setLabel(label);
-  main_window->getFsd()->update();
+  main_window->getModel()->update();
   main_window->setUnsavedChanges(true);
 }
 

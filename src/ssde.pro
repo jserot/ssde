@@ -15,14 +15,14 @@ DEPENDPATH += ../../gqv/QGVCore
 HEADERS += include/nlohmann_json.h \
            transition.h  \
            state.h  \
-           fsd.h  \
+           model.h  \
            properties.h \
            mainwindow.h
 SOURCES += transition.cpp \
            state.cpp \
-           fsd.cpp \
+           model.cpp \
            properties.cpp \
-           main.cpp \
-           mainwindow.cpp
+           mainwindow.cpp \
+           main.cpp
 
 RESOURCES += resources.qrc

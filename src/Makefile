@@ -54,21 +54,21 @@ OBJECTS_DIR   = ./
 
 SOURCES       = transition.cpp \
 		state.cpp \
-		fsd.cpp \
+		model.cpp \
 		properties.cpp \
-		main.cpp \
-		mainwindow.cpp qrc_resources.cpp \
-		moc_fsd.cpp \
+		mainwindow.cpp \
+		main.cpp qrc_resources.cpp \
+		moc_model.cpp \
 		moc_properties.cpp \
 		moc_mainwindow.cpp
 OBJECTS       = transition.o \
 		state.o \
-		fsd.o \
+		model.o \
 		properties.o \
-		main.o \
 		mainwindow.o \
+		main.o \
 		qrc_resources.o \
-		moc_fsd.o \
+		moc_model.o \
 		moc_properties.o \
 		moc_mainwindow.o
 DIST          = ../../../../Qt/6.3.1/macos/mkspecs/features/spec_pre.prf \
@@ -320,14 +320,14 @@ DIST          = ../../../../Qt/6.3.1/macos/mkspecs/features/spec_pre.prf \
 		ssde.pro include/nlohmann_json.h \
 		transition.h \
 		state.h \
-		fsd.h \
+		model.h \
 		properties.h \
 		mainwindow.h transition.cpp \
 		state.cpp \
-		fsd.cpp \
+		model.cpp \
 		properties.cpp \
-		main.cpp \
-		mainwindow.cpp
+		mainwindow.cpp \
+		main.cpp
 QMAKE_TARGET  = ssde
 DESTDIR       = 
 TARGET        = ssde.app/Contents/MacOS/ssde
@@ -885,8 +885,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents resources.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents include/nlohmann_json.h transition.h state.h fsd.h properties.h mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents transition.cpp state.cpp fsd.cpp properties.cpp main.cpp mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents include/nlohmann_json.h transition.h state.h model.h properties.h mainwindow.h $(DISTDIR)/
+	$(COPY_FILE) --parents transition.cpp state.cpp model.cpp properties.cpp mainwindow.cpp main.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -926,10 +926,10 @@ qrc_resources.cpp: resources.qrc \
 		icons/state.png
 	/Users/jserot/Qt/6.3.1/macos/libexec/rcc -name resources resources.qrc -o qrc_resources.cpp
 
-compiler_moc_header_make_all: moc_fsd.cpp moc_properties.cpp moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_model.cpp moc_properties.cpp moc_mainwindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_fsd.cpp moc_properties.cpp moc_mainwindow.cpp
-moc_fsd.cpp: fsd.h \
+	-$(DEL_FILE) moc_model.cpp moc_properties.cpp moc_mainwindow.cpp
+moc_model.cpp: model.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QFile \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qfile.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QTextStream \
@@ -942,7 +942,7 @@ moc_fsd.cpp: fsd.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QList \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qlist.h \
 		../../../../Qt/6.3.1/macos/libexec/moc
-	/Users/jserot/Qt/6.3.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=13 -D__clang_minor__=1 -D__clang_patchlevel__=6 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/jserot/Qt/6.3.1/macos/mkspecs/macx-clang -I/Users/jserot/Dev/Qt/ssde/src -I/Users/jserot/Dev/Qt/qgv/QGVCore -I/Users/jserot/Dev/Qt/ssde/src/private -I/opt/homebrew/Cellar/graphviz/9.0.0/include/graphviz -I/Users/jserot/Qt/6.3.1/macos/lib/QtWidgets.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtGui.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/jserot/Qt/6.3.1/macos/lib fsd.h -o moc_fsd.cpp
+	/Users/jserot/Qt/6.3.1/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=13 -D__clang_minor__=1 -D__clang_patchlevel__=6 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/jserot/Qt/6.3.1/macos/mkspecs/macx-clang -I/Users/jserot/Dev/Qt/ssde/src -I/Users/jserot/Dev/Qt/qgv/QGVCore -I/Users/jserot/Dev/Qt/ssde/src/private -I/opt/homebrew/Cellar/graphviz/9.0.0/include/graphviz -I/Users/jserot/Qt/6.3.1/macos/lib/QtWidgets.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtGui.framework/Headers -I/Users/jserot/Qt/6.3.1/macos/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/jserot/Qt/6.3.1/macos/lib model.h -o moc_model.cpp
 
 moc_properties.cpp: properties.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QComboBox \
@@ -1055,7 +1055,7 @@ state.o: state.cpp state.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qdebug.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o state.o state.cpp
 
-fsd.o: fsd.cpp fsd.h \
+model.o: model.cpp model.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QFile \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qfile.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QTextStream \
@@ -1086,7 +1086,7 @@ fsd.o: fsd.cpp fsd.h \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/QPen \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/qpen.h \
 		../../qgv/QGVCore/QGVEdge.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fsd.o fsd.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o model.o model.cpp
 
 properties.o: properties.cpp properties.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QComboBox \
@@ -1124,11 +1124,6 @@ properties.o: properties.cpp properties.h \
 		transition.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsPolygonItem \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsSimpleTextItem \
-		fsd.h \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QFile \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qfile.h \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QTextStream \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qtextstream.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QHBoxLayout \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QLabel \
@@ -1144,43 +1139,6 @@ properties.o: properties.cpp properties.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qdebug.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o properties.o properties.cpp
 
-main.o: main.cpp mainwindow.h \
-		state.h \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsPixmapItem \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgraphicsitem.h \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QList \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qlist.h \
-		properties.h \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QComboBox \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qcombobox.h \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QFrame \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qframe.h \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsItem \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGroupBox \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgroupbox.h \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QLineEdit \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qlineedit.h \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QListView \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qlistview.h \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QString \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qstring.h \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QStringListModel \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qstringlistmodel.h \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QMainWindow \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		../../qgv/QGVCore/QGVScene.h \
-		../../qgv/QGVCore/qgv.h \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QtGlobal \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qglobal.h \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsScene \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgraphicsscene.h \
-		../../qgv/QGVCore/QGVNode.h \
-		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/QPen \
-		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/qpen.h \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QApplication \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qapplication.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
-
 mainwindow.o: mainwindow.cpp transition.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsPolygonItem \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgraphicsitem.h \
@@ -1189,7 +1147,7 @@ mainwindow.o: mainwindow.cpp transition.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsPixmapItem \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QList \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qlist.h \
-		fsd.h \
+		model.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QFile \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qfile.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QTextStream \
@@ -1335,15 +1293,51 @@ mainwindow.o: mainwindow.cpp transition.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qwidgetaction.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qwizard.h \
-		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qtwidgetsversion.h \
-		../../qgv/QGVCore/QGVEdge.h
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qtwidgetsversion.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
+
+main.o: main.cpp mainwindow.h \
+		state.h \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsPixmapItem \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgraphicsitem.h \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QList \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qlist.h \
+		properties.h \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QComboBox \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qcombobox.h \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QFrame \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qframe.h \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsItem \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGroupBox \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgroupbox.h \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QLineEdit \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qlineedit.h \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QListView \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qlistview.h \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QString \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qstring.h \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QStringListModel \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qstringlistmodel.h \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QMainWindow \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		../../qgv/QGVCore/QGVScene.h \
+		../../qgv/QGVCore/qgv.h \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QtGlobal \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qglobal.h \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsScene \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgraphicsscene.h \
+		../../qgv/QGVCore/QGVNode.h \
+		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/QPen \
+		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/qpen.h \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QApplication \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qapplication.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 qrc_resources.o: qrc_resources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
 
-moc_fsd.o: moc_fsd.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_fsd.o moc_fsd.cpp
+moc_model.o: moc_model.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_model.o moc_model.cpp
 
 moc_properties.o: moc_properties.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_properties.o moc_properties.cpp

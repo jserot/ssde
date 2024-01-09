@@ -12,34 +12,34 @@
 
 #include "transition.h"
 #include "state.h"
-#include "fsd.h"
+#include "model.h"
 #include "mainwindow.h"
 
 #include <QtWidgets>
 #include <QFile>
 #include <QTextStream>
-#include "QGVScene.h"
-#include "QGVNode.h"
-#include "QGVEdge.h"
-// #include "QGVSubGraph.h"
 
 QString MainWindow::title = "FSD Editor";
 
-int MainWindow::scene_width = 500;
+int MainWindow::scene_width = 400;
 int MainWindow::scene_height = 1000;
+double MainWindow::zoomInFactor = 1.25;
+double MainWindow::zoomOutFactor = 0.8;
+double MainWindow::minScaleFactor = 0.5;
+double MainWindow::maxScaleFactor = 2.0;
 
 MainWindow::MainWindow()
 {
     createActions();
     createMenus();
 
-    fsd = new Fsd(this);
-    fsd->setSceneRect(QRectF(0, 0, scene_width, scene_height));
-    // connect(fsd, SIGNAL(stateInserted(State*)), this, SLOT(stateInserted(State*)));
-    // connect(fsd, SIGNAL(transitionInserted(Transition*)), this, SLOT(transitionInserted(Transition*)));
-    connect(fsd, SIGNAL(stateSelected(State*)), this, SLOT(stateSelected(State*)));
-    connect(fsd, SIGNAL(transitionSelected(Transition*)), this, SLOT(transitionSelected(Transition*)));
-    connect(fsd, SIGNAL(fsdModified()), this, SLOT(fsdModified()));
+    model = new Model(this);
+    model->setSceneRect(QRectF(0, 0, scene_width, scene_height));
+    connect(model, SIGNAL(stateInserted(State*)), this, SLOT(stateInserted(State*)));
+    connect(model, SIGNAL(transitionInserted(Transition*)), this, SLOT(transitionInserted(Transition*)));
+    connect(model, SIGNAL(stateSelected(State*)), this, SLOT(stateSelected(State*)));
+    connect(model, SIGNAL(transitionSelected(Transition*)), this, SLOT(transitionSelected(Transition*)));
+    connect(model, SIGNAL(modelModified()), this, SLOT(modelModified()));
     createToolbar();
 
     QHBoxLayout *layout = new QHBoxLayout;
@@ -47,14 +47,13 @@ MainWindow::MainWindow()
     createPropertiesPanel();
     layout->addWidget(properties_panel);
 
-    view = new QGraphicsView(fsd);
-    view->setMinimumWidth(200);
-    view->setMinimumHeight(400);
-    layout->addWidget(view);
+    editView = new QGraphicsView(model);
+    editView->setMinimumWidth(200);
+    editView->setMinimumHeight(400);
+    layout->addWidget(editView);
 
-    dotScene = new QGVScene("DOT", this);
-    dotScene->setSceneRect(QRectF(0, 0, scene_width, scene_height));
-    dotView = new QGraphicsView(dotScene);
+    dotView = new QGraphicsView();
+    dotView->setSceneRect(QRectF(0, 0, scene_width, scene_height));
     dotView->setMinimumWidth(200);
     dotView->setMinimumHeight(400);
     layout->addWidget(dotView);
@@ -67,22 +66,23 @@ MainWindow::MainWindow()
     setUnifiedTitleAndToolBarOnMac(true);
 
     unsaved_changes = false;
-    zoomFactor = 1.0;
+    scaleFactor = 1.0;
 }
 
 void MainWindow::toolButtonClicked(int)
 {
-    fsd->setMode(Fsd::Mode(toolSet->checkedId()));
+    model->setMode(Model::Mode(toolSet->checkedId()));
 }
 
-// void MainWindow::stateInserted(State *state)
-// {
-// }
+void MainWindow::stateInserted(State *state)
+{
+  Q_UNUSED(state);
+}
 
-// void MainWindow::transitionInserted(Transition *transition)
-// {
-// }
-
+void MainWindow::transitionInserted(Transition *transition)
+{
+  Q_UNUSED(transition);
+}
 
 void MainWindow::stateSelected(State *state)
 {
@@ -94,14 +94,14 @@ void MainWindow::transitionSelected(Transition *transition)
   properties_panel->setSelectedItem(transition);
 }
 
-void MainWindow::fsdModified()
+void MainWindow::modelModified()
 {
   setUnsavedChanges(true);
 }
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, tr("About SSDE"), tr("Finite State Diagram Editor\n(C) J. Sérot, 2019\ngithub.com/jserot/ssde\njocelyn.serot@uca.fr"));
+    QMessageBox::about(this, tr("About SSDE"), tr("Finite State Diagram Editor\n(C) J. Sérot\ngithub.com/jserot/ssde\njocelyn.serot@uca.fr"));
 }
 
 void MainWindow::createActions()
@@ -130,11 +130,7 @@ void MainWindow::createActions()
     exitAction->setShortcuts(QKeySequence::Quit);
     connect(exitAction, SIGNAL(triggered()), this, SLOT(quit()));
 
-    exportDotAction = new QAction(tr("E&xport to DOT"), this);
-    exportDotAction->setShortcut(tr("Ctrl+E"));
-    connect(exportDotAction, SIGNAL(triggered()), this, SLOT(exportDot()));
-
-    renderDotAction = new QAction(tr("Draw dOT"), this);
+    renderDotAction = new QAction(tr("Render DOT"), this);
     renderDotAction->setShortcut(tr("Ctrl+R"));
     connect(renderDotAction, SIGNAL(triggered()), this, SLOT(renderDot()));
 
@@ -145,6 +141,10 @@ void MainWindow::createActions()
     zoomOutAction = new QAction(tr("Zoom Out"), this);
     zoomOutAction->setShortcut(tr("Ctrl+-"));
     connect(zoomOutAction, SIGNAL(triggered()), this, SLOT(zoomOut()));
+
+    exportDotAction = new QAction(tr("E&xport to DOT"), this);
+    exportDotAction->setShortcut(tr("Ctrl+E"));
+    connect(exportDotAction, SIGNAL(triggered()), this, SLOT(exportDot()));
 }
 
 void MainWindow::createMenus()
@@ -158,10 +158,10 @@ void MainWindow::createMenus()
     fileMenu->addAction(exitAction);
 
     dotMenu = menuBar()->addMenu(tr("&Dot"));
-    dotMenu->addAction(exportDotAction);
     dotMenu->addAction(renderDotAction);
     dotMenu->addAction(zoomInAction);
     dotMenu->addAction(zoomOutAction);
+    dotMenu->addAction(exportDotAction);
 }
 
 void MainWindow::createToolbar()
@@ -193,12 +193,12 @@ void MainWindow::createToolbar()
     deleteButton->setToolTip("Delete items");
 
     toolSet = new QButtonGroup(this);
-    toolSet->addButton(selectButton, int(Fsd::SelectItem));
-    toolSet->addButton(addStateButton, int(Fsd::InsertState));
-    toolSet->addButton(addPseudoStateButton, int(Fsd::InsertPseudoState));
-    toolSet->addButton(addTransitionButton, int(Fsd::InsertTransition));
-    toolSet->addButton(addLoopTransitionButton, int(Fsd::InsertLoopTransition));
-    toolSet->addButton(deleteButton, int(Fsd::DeleteItem));
+    toolSet->addButton(selectButton, int(Model::SelectItem));
+    toolSet->addButton(addStateButton, int(Model::InsertState));
+    toolSet->addButton(addPseudoStateButton, int(Model::InsertPseudoState));
+    toolSet->addButton(addTransitionButton, int(Model::InsertTransition));
+    toolSet->addButton(addLoopTransitionButton, int(Model::InsertLoopTransition));
+    toolSet->addButton(deleteButton, int(Model::DeleteItem));
     connect(toolSet, SIGNAL(idClicked(int)), this, SLOT(toolButtonClicked(int)));
 
     toolBar = addToolBar(tr("Tools"));
@@ -252,8 +252,8 @@ void MainWindow::openFile()
   }
   QTextStream is(&file);
   QString txt = is.readAll();
-  fsd->fromString(txt);
-  view->ensureVisible(fsd->itemsBoundingRect());
+  model->fromString(txt);
+  editView->ensureVisible(model->itemsBoundingRect());
   properties_panel->clear();
   currentFileName = fname;
   setUnsavedChanges(false);
@@ -262,7 +262,7 @@ void MainWindow::openFile()
 void MainWindow::newDiagram()
 {
   checkUnsavedChanges();
-  fsd->clear();
+  model->clear();
   properties_panel->clear();
   currentFileName.clear();
   setUnsavedChanges(false);
@@ -277,7 +277,7 @@ void MainWindow::saveToFile(QString fileName)
     return;
   }
   QTextStream os(&file);
-  os << fsd->toString();
+  os << model->toString();
   setUnsavedChanges(false);
 }
 
@@ -298,42 +298,32 @@ void MainWindow::exportDot()
 {
   QString fname = QFileDialog::getSaveFileName( this, "Export to DOT file", "", "DOT file (*.dot)");
   if ( fname.isEmpty() ) return;
-  fsd->exportDot(fname);
+  model->exportDot(fname);
 }
 
 void MainWindow::renderDot()
 {
-  // dotScene->clear();  // This does not reset the state of the scene. Hence, re-added items will be offset :(
-  delete dotScene;
-  dotScene = new QGVScene("DOT", this);
-  dotScene->setSceneRect(QRectF(0, 0, scene_width, scene_height));
-  dotView->setScene(dotScene);
-  fsd->renderDot(dotScene);
-  dotScene->applyLayout();
-  //dotView->fitInView(dotScene->sceneRect(), Qt::KeepAspectRatio);
-  dotView->ensureVisible(dotScene->itemsBoundingRect());
+  model->renderDot(dotView, scene_width, scene_height);
 }
 
 void MainWindow::zoomIn()
 {
-  zoom(1.25);
+  zoom(zoomInFactor);
 }
 
 void MainWindow::zoomOut()
 {
-  zoom(0.8);
+  zoom(zoomOutFactor);
 }
 
 void MainWindow::zoom(double factor)
 {
-  zoomFactor *= factor;
-  // qDebug() << "zoomFactor=" << zoomFactor;
   dotView->scale(factor, factor);
-  dotView->ensureVisible(dotScene->itemsBoundingRect());
-  zoomInAction->setEnabled(zoomFactor < 3.0);
-  zoomOutAction->setEnabled(zoomFactor > 0.33);
+  //dotView->ensureVisible(model->itemsBoundingRect());
+  scaleFactor *= factor;
+  zoomInAction->setEnabled(scaleFactor <= maxScaleFactor);
+  zoomOutAction->setEnabled(scaleFactor >= minScaleFactor);
 }
-
 
 void MainWindow::quit()
 {

@@ -1,9 +1,7 @@
-* Fix dimensions and window resizing capabilities
-* Add a link to RFSM
 * Allow resizing of state boxes
 * Font choice
 * Change cursor shape accoring to currently selected tool
 * Draw state boxes with round corners
 * Add properties (labels) to states ?
-* Allow customization of DOT export parameters ?
+* Allow customization of DOT export/render parameters ?
 * Export to SCXML ?

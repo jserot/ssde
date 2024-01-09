@@ -10,8 +10,8 @@
 /*                                                                     */
 /***********************************************************************/
 
-#ifndef FSD_H
-#define FSD_H
+#ifndef MODEL_H
+#define MODEL_H
 
 #include <QFile>
 #include <QTextStream>
@@ -25,22 +25,21 @@ class QPointF;
 class QGraphicsLineItem;
 class QFont;
 class QColor;
-class QGVScene;
 QT_END_NAMESPACE
 
-class Fsd : public QGraphicsScene
+class Model : public QGraphicsScene
 {
     Q_OBJECT
 
 public:
     enum Mode { InsertState, InsertPseudoState, InsertTransition, InsertLoopTransition, SelectItem, DeleteItem };
 
-    explicit Fsd(QWidget *parent = 0);
+    explicit Model(QWidget *parent = 0);
     void fromString(QString& json_text);
     QString toString();
 
     void exportDot(QString fname);
-    void renderDot(QGVScene *scene);
+    void renderDot(QGraphicsView *view, int width, int height);
 
     State* initState();
     QList<State*> states();
@@ -55,7 +54,7 @@ public slots:
 signals:
     /* void stateInserted(State *item); */
     /* void transitionInserted(Transition *item); */
-    void fsdModified();
+    void modelModified();
     void stateSelected(State *item);
     void transitionSelected(Transition *item);
 
@@ -80,6 +79,8 @@ private:
 
     static QColor lineColor;
     static QColor boxColor;
+
+    QGraphicsScene *scene;
 };
 
-#endif // FSD_H
+#endif // MODEL_H

@@ -21,7 +21,7 @@
 #include "QGVScene.h"
 #include "QGVNode.h"
 
-class Fsd;
+class Model;
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -36,6 +36,7 @@ class QFont;
 class QToolButton;
 class QAbstractButton;
 class QGraphicsView;
+class SceneViewer;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -44,17 +45,21 @@ class MainWindow : public QMainWindow
 
   static int scene_width;
   static int scene_height;
+  static double zoomInFactor;
+  static double zoomOutFactor;
+  static double minScaleFactor;
+  static double maxScaleFactor;
 
 public:
    MainWindow();
 
 private slots:
     void toolButtonClicked(int id);
-    // void stateInserted(State *);
-    // void transitionInserted(State *);
+    void stateInserted(State *);
+    void transitionInserted(Transition *);
     void stateSelected(State *);
     void transitionSelected(Transition *);
-    void fsdModified();
+    void modelModified();
     void save();
     void saveAs();
     void openFile();
@@ -65,7 +70,6 @@ private slots:
     void renderDot();
     void zoomIn();
     void zoomOut();
-    void zoom(double factor);
 
 private:
     void createActions();
@@ -75,11 +79,13 @@ private:
 
     void checkUnsavedChanges();
     void saveToFile(QString fname);
+
+    void zoom(double factor);
     
-    Fsd *fsd;
-    QGVScene *dotScene;
-    double zoomFactor;
-    QGraphicsView *view;
+    Model *model;
+    double scaleFactor;
+
+    QGraphicsView *editView;
     QGraphicsView *dotView;
     PropertiesPanel* properties_panel;
 
@@ -107,7 +113,7 @@ private:
     static QString title;
     
 public:
-   Fsd* getFsd() const { return fsd; }
+   Model* getModel() const { return model; }
     void setUnsavedChanges(bool unsaved_changes = true);
 
 };

@@ -10,33 +10,36 @@
 /*                                                                     */
 /***********************************************************************/
 
-#include "fsd.h"
+#include "model.h"
 #include "transition.h"
 #include "include/nlohmann_json.h"
 #include <QMessageBox>
 #include <QGraphicsSceneMouseEvent>
-#include <QDebug>
+#include <QGraphicsScene>
+#include <QGraphicsView>
 #include "QGVScene.h"
 #include "QGVNode.h"
 #include "QGVEdge.h"
+#include <QDebug>
 
-int Fsd::stateCounter = 0;
-QColor Fsd::lineColor = Qt::lightGray;
-QColor Fsd::boxColor = Qt::black;
+int Model::stateCounter = 0;
+QColor Model::lineColor = Qt::lightGray;
+QColor Model::boxColor = Qt::black;
 
-Fsd::Fsd(QWidget *parent)
+Model::Model(QWidget *parent)
     : QGraphicsScene(parent)
 {
     mode = SelectItem;
     mainWindow = parent;
+    scene = NULL;
 }
 
-void Fsd::setMode(Mode mode)
+void Model::setMode(Mode mode)
 {
     this->mode = mode;
 }
 
-State* Fsd::addState(QPointF pos, QString id)
+State* Model::addState(QPointF pos, QString id)
 {
   State* state = new State(id);
   state->setBrush(boxColor);
@@ -45,7 +48,7 @@ State* Fsd::addState(QPointF pos, QString id)
   return state;
 }
 
-State* Fsd::addPseudoState(QPointF pos)
+State* Model::addPseudoState(QPointF pos)
 {
    State* state = new State();
    state->setBrush(boxColor);
@@ -54,7 +57,7 @@ State* Fsd::addPseudoState(QPointF pos)
    return state;
 }
 
-QList<State*> Fsd::states()
+QList<State*> Model::states()
 {
   QList<State*> states;
   for ( const auto item: items() )
@@ -63,7 +66,7 @@ QList<State*> Fsd::states()
   return states;
 }
 
-QList<Transition*> Fsd::transitions()
+QList<Transition*> Model::transitions()
 {
   QList<Transition*> transitions;
   for ( const auto item: items() )
@@ -72,21 +75,21 @@ QList<Transition*> Fsd::transitions()
   return transitions;
 }
 
-State* Fsd::getState(QString id)
+State* Model::getState(QString id)
 {
   foreach ( State* s, states() )
     if ( s->getId() == id ) return s;
   return NULL;
 }
 
-bool Fsd::hasPseudoState()
+bool Model::hasPseudoState()
 {
   foreach ( State* s, states() )
     if ( s->isPseudo() ) return true;
   return false;
 }
 
-Transition* Fsd::addTransition(State* srcState, State* dstState, QString label, State::Location location)
+Transition* Model::addTransition(State* srcState, State* dstState, QString label, State::Location location)
 {
   Transition *transition = new Transition(srcState, dstState, label, location);
   srcState->addTransition(transition);
@@ -96,7 +99,7 @@ Transition* Fsd::addTransition(State* srcState, State* dstState, QString label, 
   return transition;
 }
 
-void Fsd::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
+void Model::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     if (mouseEvent->button() != Qt::LeftButton) return;
     State *state;
@@ -106,7 +109,7 @@ void Fsd::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         case InsertState:
             state = addState(mouseEvent->scenePos(), QString::number(stateCounter++));
             //emit stateInserted(state);
-            emit fsdModified();
+            emit modelModified();
             break;
         case InsertPseudoState:
           if ( ! hasPseudoState() ) {
@@ -114,7 +117,7 @@ void Fsd::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(), mouseEvent->scenePos()));
             line->setPen(QPen(lineColor, 2));
             addItem(line);
-            emit fsdModified();
+            emit modelModified();
             }
           else
             QMessageBox::warning(mainWindow, "Error",
@@ -124,7 +127,7 @@ void Fsd::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(), mouseEvent->scenePos()));
             line->setPen(QPen(lineColor, 2));
             addItem(line);
-            emit fsdModified();
+            emit modelModified();
             break;
         case InsertLoopTransition:
           item = itemAt(mouseEvent->scenePos(), QTransform());
@@ -134,7 +137,7 @@ void Fsd::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
               State::Location location = state->locateEvent(mouseEvent);
               Transition *transition = addTransition(state, state, "", location);
               transition->updatePosition();
-              emit fsdModified();
+              emit modelModified();
               // emit transitionInserted(transition);
               }
             }
@@ -158,7 +161,7 @@ void Fsd::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 removeItem(item);
                 delete item;
                 }
-              emit fsdModified();
+              emit modelModified();
               }
               break;
             case State::Type:
@@ -166,7 +169,7 @@ void Fsd::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
               state = qgraphicsitem_cast<State *>(item);
               state->removeTransitions();
               removeItem(item);
-              emit fsdModified();
+              emit modelModified();
               delete item;
               break;
             default:
@@ -193,7 +196,7 @@ void Fsd::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
        }
 }
 
-void Fsd::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
+void Model::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
   if ( (mode == InsertTransition || mode == InsertPseudoState) && line != 0 ) {
     QLineF newLine(line->line().p1(), mouseEvent->scenePos());
@@ -204,7 +207,7 @@ void Fsd::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
 }
 
-void Fsd::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
+void Model::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
   if ( line != 0 && (mode == InsertTransition || mode == InsertPseudoState) ) {
     QList<QGraphicsItem *> srcStates = items(line->line().p1());
@@ -223,7 +226,7 @@ void Fsd::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         Transition *transition = addTransition(srcState, dstState, "", location);
         transition->updatePosition();
         // emit transitionInserted(transition);
-        emit fsdModified();
+        emit modelModified();
         }
       }
     else if ( mode == InsertPseudoState && startState != NULL ) {
@@ -236,7 +239,7 @@ void Fsd::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
   QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
 
-bool Fsd::isItemChange(int type)
+bool Model::isItemChange(int type)
 {
     foreach (QGraphicsItem *item, selectedItems()) {
         if (item->type() == type)
@@ -245,7 +248,7 @@ bool Fsd::isItemChange(int type)
     return false;
 }
 
-void Fsd::fromString(QString& json_text)
+void Model::fromString(QString& json_text)
 {
     auto json = nlohmann::json::parse(json_text.toStdString());
 
@@ -278,7 +281,7 @@ void Fsd::fromString(QString& json_text)
         default: location = State::None; break;
         }
       if ( ! states.contains(src_state) || ! states.contains(dst_state) )
-        throw std::invalid_argument("Fsd::fromString: invalid state id");
+        throw std::invalid_argument("Model::fromString: invalid state id");
       State *srcState = states.value(src_state);
       State *dstState = states.value(dst_state);
       Transition *transition = addTransition(srcState, dstState, QString::fromStdString(label), location);
@@ -286,7 +289,7 @@ void Fsd::fromString(QString& json_text)
       }
 }
 
-QString Fsd::toString()
+QString Model::toString()
 {
     nlohmann::json json_res;
 
@@ -327,7 +330,7 @@ QString dotTransitionLabel(QString label, QString lrpad)
        + lrpad + l.at(1) + lrpad;
 }
 
-void Fsd::exportDot(QString fname)
+void Model::exportDot(QString fname)
 {
   QFile file(fname);
   file.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -370,15 +373,21 @@ void Fsd::exportDot(QString fname)
   os << "}\n";
 }
 
-void Fsd::renderDot(QGVScene *dotScene)
+void Model::renderDot(QGraphicsView *view, int width, int height)
 {
-  dotScene->setGraphAttribute("rankdir", "UD");
-  dotScene->setGraphAttribute("nodesep", "0.55");
-  dotScene->setGraphAttribute("ranksep", "0.95");
-  dotScene->setGraphAttribute("fontsize", "14");
-  dotScene->setGraphAttribute("mindist", "1.0");
-  dotScene->setNodeAttribute("shape", "circle");
-  dotScene->setNodeAttribute("style", "solid");
+  // TODO: factorize code with exportDot (?)
+  // Build scene
+  if ( scene ) delete scene; // QGraphicScene::clear does not reset the scene state :(
+  QGVScene* scene = new QGVScene("DOT", this);
+  scene->setSceneRect(QRectF(0, 0, width, height));
+  
+  scene->setGraphAttribute("rankdir", "UD");
+  scene->setGraphAttribute("nodesep", "0.55");
+  scene->setGraphAttribute("ranksep", "0.95");
+  scene->setGraphAttribute("fontsize", "14");
+  scene->setGraphAttribute("mindist", "1.0");
+  scene->setNodeAttribute("shape", "circle");
+  scene->setNodeAttribute("style", "solid");
 
   QMap<QString,QGVNode*> nodes;
 
@@ -386,7 +395,7 @@ void Fsd::renderDot(QGVScene *dotScene)
     if ( item->type() == State::Type ) {
       State* state = qgraphicsitem_cast<State *>(item);
       QString id = state->getId();
-      QGVNode *node = dotScene->addNode(id);
+      QGVNode *node = scene->addNode(id);
       if ( state->isPseudo() ) {
         node->setAttribute("shape", "none"); 
         node->setAttribute("label", "");
@@ -401,21 +410,13 @@ void Fsd::renderDot(QGVScene *dotScene)
       QString dst_id = transition->dstState()->getId();
       QString label = transition->isInitial() ? "" : dotTransitionLabel(transition->getLabel(),"  ");
       if ( nodes.contains(src_id) && nodes.contains(dst_id) ) {
-        QGVEdge* edge = dotScene->addEdge(nodes[src_id], nodes[dst_id], label);
-        Q_UNUSED(edge);
-        //qDebug() << "Added edge " << src_id << " -> " << dst_id << " [" << edge->label() << "]";
+        scene->addEdge(nodes[src_id], nodes[dst_id], label);
+        }
       }
     }
-  }
-
-  // Fixed example for debug
-  // QGVNode *_init = dotScene->addNode("");
-  // _init->setAttribute("shape","none");
-  // QGVNode *stopped = dotScene->addNode("Stopped");
-  // QGVNode *running = dotScene->addNode("Running");
-  // dotScene->addEdge(_init, stopped, "");
-  // dotScene->addEdge(stopped, running, "  StartStop  \n  _________  \n  c:=0  ");
-  // dotScene->addEdge(running, stopped, "  StartStop  ");
-  // dotScene->addEdge(running, running, "  H  \n  ______  \n  c:=c+1  ");
+  // Render it in the specified view
+  scene->applyLayout();
+  view->setScene(scene);
+  view->ensureVisible(scene->itemsBoundingRect());
 }
 
