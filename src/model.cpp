@@ -39,6 +39,11 @@ void Model::setMode(Mode mode)
     this->mode = mode;
 }
 
+Model::Mode Model::getMode(void)
+{
+  return mode;
+}
+
 State* Model::addState(QPointF pos, QString id)
 {
   State* state = new State(id);
@@ -99,6 +104,27 @@ Transition* Model::addTransition(State* srcState, State* dstState, QString label
   return transition;
 }
 
+bool Model::event(QEvent *event)
+{
+  //qDebug() << "Got event " << event->type();
+  switch ( event->type() ) {
+    // Note. The [Enter] and [Leave] events cannot be handled by the model itself
+    // because the associated action [setCursor] can only be applied to the _enclosing_ view...
+    // This workaround uses signals to delegate 
+    case QEvent::Enter:
+      qDebug() << "Entering scene ";
+      emit mouseEnter();
+      return true;
+    case QEvent::GraphicsSceneLeave:
+      qDebug() << "Leaving scene";
+      emit mouseLeave();
+      return true;
+    default:
+        break;
+    }
+  return QGraphicsScene::event(event);
+}
+
 void Model::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     if (mouseEvent->button() != Qt::LeftButton) return;
@@ -138,7 +164,7 @@ void Model::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
               Transition *transition = addTransition(state, state, "", location);
               transition->updatePosition();
               emit modelModified();
-              // emit transitionInserted(transition);
+              //emit transitionInserted(transition);
               }
             }
             break;
@@ -147,7 +173,6 @@ void Model::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
           if ( item != NULL ) {
             switch ( item->type() ) {
             case Transition::Type: {
-              //qDebug() << "Deleting transition " << (long)item;
               transition = qgraphicsitem_cast<Transition *>(item);
               State *srcState = transition->srcState();
               State *dstState = transition->dstState();
@@ -165,7 +190,6 @@ void Model::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
               }
               break;
             case State::Type:
-              //qDebug() << "Deleting state " << (long)item;
               state = qgraphicsitem_cast<State *>(item);
               state->removeTransitions();
               removeItem(item);

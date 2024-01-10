@@ -50,15 +50,19 @@ public:
 
 public slots:
     void setMode(Mode mode);
+    Mode getMode(void);
 
 signals:
-    /* void stateInserted(State *item); */
-    /* void transitionInserted(Transition *item); */
+    // void stateInserted(State *item);
+    // void transitionInserted(Transition *item);
     void modelModified();
     void stateSelected(State *item);
     void transitionSelected(Transition *item);
+    void mouseEnter(void);
+    void mouseLeave(void);
 
 protected:
+    bool event(QEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) override;

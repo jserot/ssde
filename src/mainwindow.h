@@ -70,6 +70,8 @@ private slots:
     void renderDot();
     void zoomIn();
     void zoomOut();
+    void updateCursor();
+    void resetCursor();
 
 private:
     void createActions();
@@ -114,7 +116,7 @@ private:
     
 public:
    Model* getModel() const { return model; }
-    void setUnsavedChanges(bool unsaved_changes = true);
+   void setUnsavedChanges(bool unsaved_changes = true);
 
 };
 

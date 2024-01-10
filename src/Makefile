@@ -918,6 +918,12 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_resources.cpp
 qrc_resources.cpp: resources.qrc \
 		../../../../Qt/6.3.1/macos/libexec/rcc \
+		cursors/initstate.png \
+		cursors/loop.png \
+		cursors/transition.png \
+		cursors/select.png \
+		cursors/delete.png \
+		cursors/state.png \
 		icons/initstate.png \
 		icons/loop.png \
 		icons/transition.png \
@@ -1075,8 +1081,8 @@ model.o: model.cpp model.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qmessagebox.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsSceneMouseEvent \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgraphicssceneevent.h \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QDebug \
-		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qdebug.h \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsView \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qgraphicsview.h \
 		../../qgv/QGVCore/QGVScene.h \
 		../../qgv/QGVCore/qgv.h \
 		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QtGlobal \
@@ -1085,7 +1091,11 @@ model.o: model.cpp model.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsItem \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/QPen \
 		../../../../Qt/6.3.1/macos/lib/QtGui.framework/Headers/qpen.h \
-		../../qgv/QGVCore/QGVEdge.h
+		../../qgv/QGVCore/QGVEdge.h \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QWidget \
+		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QDebug \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qdebug.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o model.o model.cpp
 
 properties.o: properties.cpp properties.h \
@@ -1124,6 +1134,11 @@ properties.o: properties.cpp properties.h \
 		transition.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsPolygonItem \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QGraphicsSimpleTextItem \
+		model.h \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QFile \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qfile.h \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/QTextStream \
+		../../../../Qt/6.3.1/macos/lib/QtCore.framework/Headers/qtextstream.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QHBoxLayout \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		../../../../Qt/6.3.1/macos/lib/QtWidgets.framework/Headers/QLabel \

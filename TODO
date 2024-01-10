@@ -1,6 +1,5 @@
 * Allow resizing of state boxes
 * Font choice
-* Change cursor shape accoring to currently selected tool
 * Draw state boxes with round corners
 * Add properties (labels) to states ?
 * Allow customization of DOT export/render parameters ?

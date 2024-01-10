@@ -40,6 +40,8 @@ MainWindow::MainWindow()
     connect(model, SIGNAL(stateSelected(State*)), this, SLOT(stateSelected(State*)));
     connect(model, SIGNAL(transitionSelected(Transition*)), this, SLOT(transitionSelected(Transition*)));
     connect(model, SIGNAL(modelModified()), this, SLOT(modelModified()));
+    connect(model, SIGNAL(mouseEnter()), this, SLOT(updateCursor()));
+    connect(model, SIGNAL(mouseLeave()), this, SLOT(resetCursor()));
     createToolbar();
 
     QHBoxLayout *layout = new QHBoxLayout;
@@ -71,7 +73,8 @@ MainWindow::MainWindow()
 
 void MainWindow::toolButtonClicked(int)
 {
-    model->setMode(Model::Mode(toolSet->checkedId()));
+  Model::Mode mode = Model::Mode(toolSet->checkedId());
+  model->setMode(mode);
 }
 
 void MainWindow::stateInserted(State *state)
@@ -97,6 +100,28 @@ void MainWindow::transitionSelected(Transition *transition)
 void MainWindow::modelModified()
 {
   setUnsavedChanges(true);
+}
+
+QCursor cursorOf(Model::Mode mode)
+{
+  switch ( mode ) {
+  case Model::InsertState: return QCursor(QPixmap(":cursors/state.png"),0,0);
+  case Model::InsertPseudoState: return QCursor(QPixmap(":cursors/initstate.png"),0,0);
+  case Model::InsertTransition: return QCursor(QPixmap(":cursors/transition.png"),0,0);
+  case Model::InsertLoopTransition: return QCursor(QPixmap(":cursors/loop.png"),0,0);
+  case Model::DeleteItem: return QCursor(QPixmap(":cursors/delete.png"),0,0);
+  default: return Qt::ArrowCursor;
+  }
+}
+
+void MainWindow::updateCursor()
+{
+  setCursor(cursorOf(model->getMode()));
+}
+
+void MainWindow::resetCursor()
+{
+  setCursor(Qt::ArrowCursor);
 }
 
 void MainWindow::about()
