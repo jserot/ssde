@@ -1,16 +1,13 @@
-When building from sources
+To build from source
 
-Pre-requisites
---------------
-
-* A c++-11 compiler
-* a working Qt5 installation
-
-Building
---------
-
-- `configure [options]`
-- `cd ./src`
-- `qmake`
-- `make`
-- `make install
+1. `git clone https://github.com/jserot/ssde`
+2. `cd ssde`
+3. `./configure -platform <platform>`. Currently supported platforms :
+- Qt5 on MacOS 10.12 running on an Intel (x86) Mac (platform name: `qt5-macx86`)
+- Qt6 on Windows10 running MSYS2/ucrt64 development env (platform name: `qt6-ucrt64`)
+- Qt6 on MacOS 12.6 running on an M1 Mac (platform name: `qt6-macm1`)
+4. `cd src`
+5. `make qmake`
+6. `make`
+7. `make run`
+8. `make dist`  (this will build the clickable apps in `../dist/<platform>`)

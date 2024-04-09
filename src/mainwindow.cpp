@@ -19,7 +19,7 @@
 #include <QFile>
 #include <QTextStream>
 
-QString MainWindow::title = "FSD Editor";
+QString MainWindow::title = "SSDE";
 
 int MainWindow::scene_width = 400;
 int MainWindow::scene_height = 1000;

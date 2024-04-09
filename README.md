@@ -4,7 +4,7 @@ A **S**imple **S**tate **D**iagram **E**ditor.
 
 ![](./etc/snapshot.png)
 
-## DOCUMENTATION
+## Using
 
 Everything should be rather intuitive..
 
@@ -54,7 +54,7 @@ view it using the `graphviz` application.
 
 ## INSTALLATION
 
-Prebuilt Windows and MacOS versions can be downloaded [here](https://github.com/jserot/ssde/releases/tag/v0.1c)
+Prebuilt Windows and MacOS versions can be downloaded [here](https://github.com/jserot/ssde/releases/tag/v0.3)
 
 See the `INSTALL` file to build from sources.
 
