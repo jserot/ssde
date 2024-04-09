@@ -43,7 +43,7 @@ Everything should be rather intuitive..
 ### Rendering and exporting
 
 * The current diagram can be rendered using the [DOT](http://www.graphviz.org) engine invoking the
-  `Draw` action in the `DOT` menu.
+  `Render DOT` action in the `Dot` menu.
 * The current diagram can be exported to [DOT](http://www.graphviz.org) format by invoking the `Export`
   action in the `Export` menu.
 
