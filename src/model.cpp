@@ -21,6 +21,7 @@
 #include "QGVNode.h"
 #include "QGVEdge.h"
 #include <QDebug>
+#include "qt_compat.h"
 
 int Model::stateCounter = 0;
 QColor Model::lineColor = Qt::lightGray;
@@ -112,11 +113,11 @@ bool Model::event(QEvent *event)
     // because the associated action [setCursor] can only be applied to the _enclosing_ view...
     // This workaround uses signals to delegate 
     case QEvent::Enter:
-      qDebug() << "Entering scene ";
+      //qDebug() << "Entering scene ";
       emit mouseEnter();
       return true;
-    case QEvent::GraphicsSceneLeave:
-      qDebug() << "Leaving scene";
+    case QEVENT_LEAVE:
+      //qDebug() << "Leaving scene";
       emit mouseLeave();
       return true;
     default:

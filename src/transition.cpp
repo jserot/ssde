@@ -16,9 +16,8 @@
 #include <QPainter>
 #include <QSet>
 #include <QDebug>
+#include "qt_compat.h"
 #include "misc.h"
-
-const qreal Pi = 3.14;
 
 QColor Transition::selectedColor = Qt::darkCyan;
 QColor Transition::unSelectedColor = Qt::black;
@@ -127,14 +126,14 @@ void Transition::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
                << c + QPointF(-w, 0.25*h)
                << c + QPointF(-w, -0.25*h)
                << c + QPointF(-0.5*w, -0.25*h);
-        angle = Pi;
+        angle = M_PI;
         break;
       case State::North:
         points << c + QPointF(0.25*w, 0)
                << c + QPointF(0.25*w, -h)
                << c + QPointF(-0.25*w, -h)
                << c + QPointF(-0.25*w, -0.5*h);
-        angle = Pi/2;
+        angle = M_PI/2;
         break;
       case State::South:
       case State::None:
@@ -142,7 +141,7 @@ void Transition::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
                << c + QPointF(0.25*w, h)
                << c + QPointF(-0.25*w, h)
                << c + QPointF(-0.25*w, 0.5*h);
-        angle = -Pi/2;
+        angle = -M_PI/2;
         break;
       }
       endPoint = points.at(3);
@@ -167,7 +166,7 @@ void Transition::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
         // Iterating over the end box sides to find the intersection (there must be exactly one)
         p2 = endPolygon.at(side) + myDstState->pos();
         polyLine = QLineF(p1, p2);
-        QLineF::IntersectType intersectType = polyLine.intersects(centerLine, &intersectPoint);
+        QLineF::IntersectType intersectType = POLYLINE_INTERSECT(centerLine, &intersectPoint);
         if (intersectType == QLineF::BoundedIntersection) break;
         p1 = p2;
       }
@@ -200,7 +199,7 @@ void Transition::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
       points << line.p1() << line.p2();
 
       angle = ::acos(line.dx() / line.length());
-      if (line.dy() >= 0) angle = (Pi * 2) - angle;
+      if (line.dy() >= 0) angle = (M_PI * 2) - angle;
       endPoint = line.p1();
       midPoint = (line.p1() + line.p2())/2;
     }
@@ -209,8 +208,8 @@ void Transition::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
     
     // Build arrow head  
 
-    QPointF arrowP1 = endPoint + QPointF(sin(angle + Pi/3) * arrowSize, cos(angle + Pi/3) * arrowSize);
-    QPointF arrowP2 = endPoint + QPointF(sin(angle + Pi - Pi/3) * arrowSize, cos(angle + Pi - Pi/3) * arrowSize);
+    QPointF arrowP1 = endPoint + QPointF(sin(angle + M_PI/3) * arrowSize, cos(angle + M_PI/3) * arrowSize);
+    QPointF arrowP2 = endPoint + QPointF(sin(angle + M_PI - M_PI/3) * arrowSize, cos(angle + M_PI - M_PI/3) * arrowSize);
     arrowHead.clear();
     arrowHead << endPoint << arrowP1 << arrowP2;
 

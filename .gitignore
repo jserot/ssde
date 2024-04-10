@@ -4,10 +4,12 @@
 *.dot
 moc_*.*
 qrc_resources.*
-src/ssde.app/
+ssde.app/
 CHANGELOG.txt
 README.txt
 README.html
 binaries/
+src/Makefile.*
 ./config
 etc/doc/
+src/*_resource.rc

@@ -3,20 +3,21 @@
 configure_options="$*"
 platform=qt6-ucrt64
 appname=`basename $PWD`
+qgvdir=../../qgv/dist
 
 while : ; do
   case "$1" in
     "") break;;
     -platform|--platform)
         platform=$2; shift;;
-    -appname|--appname)
-        appname=$2; shift;;
+    -qgvdir|--qgvdir)
+        qgvdir=$2; shift;;
     -help|--help)
         cat <<EOF
 Usage: configure [options]
 Options: [defaults in brackets after descriptions]
   --platform NAME         target platform (qt5-macx86, qt6-ucrt64, qt6-macm1) [default: qt6-ucrt64]
-  --appname NAME          app name [default: $appname]
+  --qgvdir PATH           path to the directory containing the QGV library name [default: $qgvdir]
   --help                  print this message
 EOF
 	exit 0;;
@@ -35,27 +36,25 @@ case "$platform" in
       echo "PLATFORM=qt6-ucrt64" >> config;
       echo "QMAKE=/ucrt64/bin/qmake6.exe" >> config;
       echo "QMAKE_SPEC=" >> config;
-      echo "WINDEPLOYQT=/ucrt64/bin/windeployqt6.exe" >> config;
-      echo "EXTDLLS=../../extdlls/ucrt64" >> config;;
+      echo "WINDEPLOYQT=/ucrt64/bin/windeployqt6.exe" >> config;;
   qt5-macx86)
       echo "PLATFORM_TYPE=macos" >> config;
       echo "PLATFORM=qt5-macx86" >> config;
       echo "QMAKE=/Developer/Qt5.8/5.8/clang_64/bin/qmake" >> config;
       echo "QMAKE_SPEC=-spec macx-clang" >> config;
-      echo "WINDEPLOYQT=unused_command" >> config;
-      echo "EXTDLLS=unused_directory" >> config;;
+      echo "WINDEPLOYQT=unused_command" >> config;;
   qt6-macm1)
       echo "PLATFORM_TYPE=macos" >> config;
       echo "PLATFORM=qt6-macm1" >> config;
       echo "QMAKE=~/Qt/6.3.1/macos/bin/qmake" >> config;
       echo "QMAKE_SPEC=-spec macx-clang CONFIG+=arm64" >> config;
-      echo "WINDEPLOYQT=unused_command" >> config;
-      echo "EXTDLLS=unused_directory" >> config;;
+      echo "WINDEPLOYQT=unused_command" >> config;;
   *) 
       echo "Unknown platform: $platform";
       rm -f config;
       exit 3;;
 esac
+echo "QGVDIR=$qgvdir" >> config
 echo "APPNAME=$appname" >> config
 if [ -e VERSION ]; then
     cat VERSION >> config;

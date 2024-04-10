@@ -14,6 +14,7 @@
 #include "state.h"
 #include "model.h"
 #include "mainwindow.h"
+#include "qt_compat.h"
 
 #include <QtWidgets>
 #include <QFile>
@@ -224,7 +225,7 @@ void MainWindow::createToolbar()
     toolSet->addButton(addTransitionButton, int(Model::InsertTransition));
     toolSet->addButton(addLoopTransitionButton, int(Model::InsertLoopTransition));
     toolSet->addButton(deleteButton, int(Model::DeleteItem));
-    connect(toolSet, SIGNAL(idClicked(int)), this, SLOT(toolButtonClicked(int)));
+    connect(toolSet, BUTTONGROUP_ID_CLICKED_SIGNAL, this, SLOT(toolButtonClicked(int)));
 
     toolBar = addToolBar(tr("Tools"));
     toolBar->addWidget(selectButton);
