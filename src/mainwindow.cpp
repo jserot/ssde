@@ -70,6 +70,7 @@ MainWindow::MainWindow()
 
     unsaved_changes = false;
     scaleFactor = 1.0;
+    initCursors();
 }
 
 void MainWindow::toolButtonClicked(int)
@@ -103,26 +104,18 @@ void MainWindow::modelModified()
   setUnsavedChanges(true);
 }
 
-QCursor cursorOf(Model::Mode mode)
-{
-  switch ( mode ) {
-  case Model::InsertState: return QCursor(QPixmap(":cursors/state.png"),0,0);
-  case Model::InsertPseudoState: return QCursor(QPixmap(":cursors/initstate.png"),0,0);
-  case Model::InsertTransition: return QCursor(QPixmap(":cursors/transition.png"),0,0);
-  case Model::InsertLoopTransition: return QCursor(QPixmap(":cursors/loop.png"),0,0);
-  case Model::DeleteItem: return QCursor(QPixmap(":cursors/delete.png"),0,0);
-  default: return Qt::ArrowCursor;
-  }
-}
-
 void MainWindow::updateCursor()
 {
-  setCursor(cursorOf(model->getMode()));
+  Model::Mode mode = model->getMode();
+  QCursor cursor = cursors.contains(mode) ? cursors.value(mode) : default_cursor;
+  setCursor(cursor);
+  // setCursor(Qt::PointingHandCursor);
 }
 
 void MainWindow::resetCursor()
 {
-  setCursor(Qt::ArrowCursor);
+  setCursor(default_cursor);
+  //setCursor(Qt::PointingHandCursor);
 }
 
 void MainWindow::about()
@@ -349,6 +342,16 @@ void MainWindow::zoom(double factor)
   scaleFactor *= factor;
   zoomInAction->setEnabled(scaleFactor <= maxScaleFactor);
   zoomOutAction->setEnabled(scaleFactor >= minScaleFactor);
+}
+
+void MainWindow::initCursors()
+{
+  default_cursor = Qt::ArrowCursor;
+  cursors[Model::InsertState] = QCursor(QPixmap(":cursors/state.png"),0,0);
+  cursors[Model::InsertPseudoState] = QCursor(QPixmap(":cursors/initstate.png"),0,0);
+  cursors[Model::InsertTransition] = QCursor(QPixmap(":cursors/transition.png"),0,0);
+  cursors[Model::InsertLoopTransition] = QCursor(QPixmap(":cursors/loop.png"),0,0);
+  cursors[Model::DeleteItem] = QCursor(QPixmap(":cursors/delete.png"),0,0);
 }
 
 void MainWindow::quit()

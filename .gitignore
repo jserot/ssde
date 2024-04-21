@@ -10,6 +10,8 @@ README.txt
 README.html
 binaries/
 src/Makefile.*
+src/debug
+src/release
 ./config
 etc/doc/
 src/*_resource.rc

@@ -15,9 +15,12 @@
 
 #include "state.h"
 #include "properties.h"
+#include "model.h"
 
 #include <QMainWindow>
 #include <QFrame>
+#include <QMap>
+#include <QCursor>
 #include "QGVScene.h"
 #include "QGVNode.h"
 
@@ -113,6 +116,10 @@ private:
     QString currentFileName;
 
     static QString title;
+
+    QCursor default_cursor;
+    QMap<Model::Mode,QCursor> cursors;
+    void initCursors();
     
 public:
    Model* getModel() const { return model; }

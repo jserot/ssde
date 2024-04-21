@@ -8,16 +8,16 @@ To build from source, the QGV library must be first installed :
 - `git clone https://github.com/jserot/gqv`
 - `cd gqv`
 - `./configure -platform <platform>`
-- `cd src`
+- `cd src/lib`
 - `make qmake`
 - `make`
-- `make dist`  (this will build the clickable apps in `<qgvdir>/lib`)
+- `make dist`  (this will install the library in `<qgvdir>/dist/<platform>/lib`)
 
 Then
 
 - `git clone https://github.com/jserot/ssde`
 - `cd ssde`
-- `./configure -platform <platform> -qgvdir <qgvdir>`
+- `./configure -platform <platform> -qgvlib <qgvlib>` (where `qgvlib` is the directory where the platform-dependent QGV library has been installed)
 - `cd src`
 - `make qmake`
 - `make`

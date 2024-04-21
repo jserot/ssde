@@ -3,21 +3,21 @@
 configure_options="$*"
 platform=qt6-ucrt64
 appname=`basename $PWD`
-qgvdir=../../qgv/dist
+qgvlibdir=../../qgv/dist/windows/lib
 
 while : ; do
   case "$1" in
     "") break;;
     -platform|--platform)
         platform=$2; shift;;
-    -qgvdir|--qgvdir)
-        qgvdir=$2; shift;;
+    -qgvlibdir--qgvlibdir)
+        qgvlibdir=$2; shift;;
     -help|--help)
         cat <<EOF
 Usage: configure [options]
 Options: [defaults in brackets after descriptions]
   --platform NAME         target platform (qt5-macx86, qt6-ucrt64, qt6-macm1) [default: qt6-ucrt64]
-  --qgvdir PATH           path to the directory containing the QGV library name [default: $qgvdir]
+  --qgvlibdir PATH        path to the directory containing the QGV library name [default: $qgvlibdir]
   --help                  print this message
 EOF
 	exit 0;;
@@ -54,7 +54,7 @@ case "$platform" in
       rm -f config;
       exit 3;;
 esac
-echo "QGVDIR=$qgvdir" >> config
+echo "QGVLIBDIR=$qgvlibdir" >> config
 echo "APPNAME=$appname" >> config
 if [ -e VERSION ]; then
     cat VERSION >> config;
