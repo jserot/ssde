@@ -62,7 +62,9 @@ endif
 
 dist:
 ifeq ($(PLATFORM_TYPE), windows)
-	rm -rf $(DIST_DIR)/windows/*
+	rm -f $(DIST_DIR)/windows/*.exe
+	rm -f $(DIST_DIR)/windows/*.dll
+	rm -rf $(DIST_DIR)/windows/{generic,imageformats,networkinformation,platforms,styles,tls,translations}
 	cp release/$(APPNAME).exe $(DIST_DIR)/windows
 	(cd $(DIST_DIR)/windows; $(WINDEPLOYQT) $(APPNAME).exe)
 	cp $(EXT_DLLS) $(DIST_DIR)/windows
