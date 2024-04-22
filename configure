@@ -10,7 +10,7 @@ while : ; do
     "") break;;
     -platform|--platform)
         platform=$2; shift;;
-    -qgvlibdir--qgvlibdir)
+    -qgvlibdir|--qgvlibdir)
         qgvlibdir=$2; shift;;
     -help|--help)
         cat <<EOF

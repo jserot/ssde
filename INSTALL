@@ -3,7 +3,7 @@ Building from sources is currently supported for (at least) the following platfo
 - Qt6 on Windows10 running MSYS2/ucrt64 development env (platform name: `qt6-ucrt64`)
 - Qt6 on MacOS 12.6 running on an M1 Mac (platform name: `qt6-macm1`)
 
-To build from source, the QGV library must be first installed :
+To build from source, the QGV library must first be installed :
 
 - `git clone https://github.com/jserot/gqv`
 - `cd gqv`
@@ -22,4 +22,4 @@ Then
 - `make qmake`
 - `make`
 - `make run`
-- `make dist`  (this will build the clickable apps in `../dist/<platform>`)
+- `make dist`  (this will build the clickable app in `../dist/<platform>`)
