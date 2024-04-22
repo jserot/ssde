@@ -12,6 +12,6 @@ binaries/
 src/Makefile.*
 src/debug
 src/release
-config
+config.*
 etc/doc/
 src/*_resource.rc
