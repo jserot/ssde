@@ -8,7 +8,6 @@ ssde.app/
 CHANGELOG.txt
 README.txt
 README.html
-binaries/
 src/Makefile.*
 src/debug
 src/release
