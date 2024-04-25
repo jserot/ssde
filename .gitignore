@@ -3,6 +3,7 @@
 *.o
 *.dot
 moc_*.*
+binaries/
 qrc_resources.*
 ssde.app/
 CHANGELOG.txt
