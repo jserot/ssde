@@ -54,7 +54,7 @@ view it using the `graphviz` application.
 
 ## INSTALLATION
 
-Prebuilt Windows and MacOS versions can be downloaded [here](https://github.com/jserot/ssde/releases/tag/v0.3)
+Prebuilt Windows and MacOS versions can be downloaded [here](https://github.com/jserot/ssde/releases)
 
 See the `INSTALL` file to build from sources.
 
